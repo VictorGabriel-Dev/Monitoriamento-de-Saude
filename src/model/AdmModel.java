@@ -2,13 +2,13 @@ package model;
 
 public class AdmModel {
     private String[] email;
-    private int senha;
+    private int[] senha;
 
-    public int getSenha() {
+    public int[] getSenha() {
         return senha;
     }
 
-    public void setSenha(int senha) {
+    public void setSenha(int[] senha) {
         this.senha = senha;
     }
 

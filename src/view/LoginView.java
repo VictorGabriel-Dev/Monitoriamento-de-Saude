@@ -6,36 +6,74 @@ import java.util .*;
 public class LoginView {
     public static void main(String[] args) {
 
-        Scanner sc = new Scanner(System.in);
-        boolean verificador = false;
-        String a;// valor de comparação
-        int b;//valor de comparação
-        int x;//senha de entrada
-        String z;// email de entrada
-
-        System.out.println("---Cadastro---");
-        System.out.println("email: ");
-        z = sc.nextLine();
-        System.out.println("Senha: ");
-        x = sc.nextInt();
-        sc.nextLine();
-
+        //metodos
         AdmModel adm = new AdmModel();
+        Scanner sc = new Scanner(System.in);
 
-        adm.setSenha(x);
-        adm.setEmail(z);
+        //declaração de variaveis verificadoras
+        boolean verificador = false; // não sei se preciso dessa variavel ainda
+        String a; //verificar email
+        int b; //verificar senha
+
+        //instanciando array
+        System.out.println("Quantas Contas você quer registrar?");
+        int tamanho = sc.nextInt();//refencia o tamanho do array
+        sc.nextLine();//consumidor
+        int[] senha = new int[tamanho];
+        String[] email = new String[tamanho];
+
+        for(int i=0; i < email.length; i++){
+            System.out.println();
+            System.out.println("---Cadastro---");
+            System.out.println("E-mail: ");
+            email[i] = sc.nextLine();
+            System.out.println("Senha: ");
+            senha[i] = sc.nextInt();
+            sc.nextLine();
+
+        }
+
+        adm.setEmail(email);//pronto
+        adm.setSenha(senha);//pronto
 
         System.out.println();
+        //Metodo mostrar senhas
+        for(int mostrarSenha : adm.getSenha()){
+            System.out.println(mostrarSenha);
+        }
+        //metodo mostrar email
+        for(String mostrarEmail : adm.getEmail()){
+            System.out.println(mostrarEmail);
+        }
 
-        System.out.println(adm.getEmail());
-        System.out.println(adm.getSenha());
+        String menu;
+        System.out.println("quer fazer login");
+        menu = sc.nextLine();
+        System.out.println("digite senha: ");
+        int valor = sc.nextInt();
 
-        // login-----------------
+
+        while (menu.equals("sim")){
+            for (int x : adm.getSenha()){
+
+                if (x == valor){
+                    System.out.println("login");
+                    System.exit(0);
+                }
+            }
+        }
+
+
+
+        /*
+        / login-----------------
 
         String email = adm.getEmail();
         int senha = adm.getSenha();
 
-        while (verificador != true) {
+        while (verificador != true) {//eu pre
+            int mostrarSenha = adm.getSenha();
+            for(int i=0; i < mostrarSenha)
 
             System.out.println("email");
             a = sc.nextLine();
@@ -53,7 +91,7 @@ public class LoginView {
             }
         }
         sc.close();
-        /* Substituir o uso de variaveis para arrays ou objetos
+        * Substituir o uso de variaveis para arrays ou objetos
          * não sei como fazer isso, vou ter que pesquisar
          */
     }
