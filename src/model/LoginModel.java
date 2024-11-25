@@ -1,6 +1,6 @@
 package model;
 
-public class AdmModel {
+public class LoginModel {
     private String[] email;
     private int[] senha;
 
