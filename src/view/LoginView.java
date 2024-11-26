@@ -1,30 +1,29 @@
 package view;
 
 import java.util.*;
+import controller.LoginController;
 
 public class LoginView {
-    public static void main(String[] args) {
+
+    //isso é o VIEW DO LOGIN
+
+    public static void login(LoginController loginController){
         Scanner sc = new Scanner(System.in);
-        boolean passou = false;
-        String teste = "email";
 
-        //isso é o VIEW DO LOGIN
-        while (passou != true) {
-            System.out.println("---Login---");
-            System.out.println("Digite seu E-mail: ");
-            String email = sc.nextLine();
-            System.out.println("Digite sua Senha: ");
-            int senha = sc.nextInt();
-            sc.nextLine();//consumidor
+        System.out.println("---Login---");
+        System.out.println("Digite seu E-mail: ");
+        String email = sc.nextLine();
+        System.out.println("Digite sua Senha: ");
+        int senha = 0;
 
-            //condicional
-            if (email.equals(teste) & senha == 123) {
-                passou = true;
-                System.out.println("Login concluido");
-            } else {
-                System.out.println("Erro! Tente novamente");
-            }
-            System.out.println();
+        try {
+            senha = Integer.parseInt(sc.nextLine());
+        } catch (NumberFormatException e) {
+            System.out.println("Senha inválida. Tente novamente.");
+            return;
         }
+
+        loginController.receber(email,senha);
     }
+
 }
