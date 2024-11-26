@@ -14,12 +14,8 @@ public class LoginController {
         this.email = email;
         this.senha = senha;
     }
-    public void recebaaaa(String email){
-        System.out.println(email);
-    }
 
     //loop
-    //condicional
     public void verificadorLogin() {
 
         while (passou != true) {
