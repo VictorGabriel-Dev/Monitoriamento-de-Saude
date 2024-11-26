@@ -1,38 +1,22 @@
 package controller;
-import view.LoginView;
 
-import javax.swing.text.View;
-import java.util.Scanner;
+import java.util.ArrayList;
+import model.UsuarioModel;
 
 public class LoginController {
-    private boolean passou = false;
-    private String teste = "email";
-    private String email;
-    private int senha;
+    private ArrayList<UsuarioModel> usuarios;
 
-    public void receber(String email, int senha){
-        this.email = email;
-        this.senha = senha;
+    public LoginController(ArrayList<UsuarioModel> usuarios){
+        this.usuarios = usuarios;
     }
 
-    //loop
-    public void verificadorLogin() {
-
-        while (passou != true) {
-            if (email == null) {
-                System.out.println("Erro! O email não foi fornecido.");
-                break;
-            }
-
-            if (email.equals(teste) && senha == 123) {
-                passou = true;
-                System.out.println("Login concluido");
-            } else {
-                System.out.println("Erro! Tente novamente");
-                System.out.println();
-                LoginView.login(this);
-            }
-        }
+    //verificador de conta
+    public boolean validaLogin(String email, String senha){
+          for(UsuarioModel usuarioModel : usuarios){
+              if (usuarioModel.getEmail().equals(email) && usuarioModel.getSenha().equals(senha)){
+                  return true;//conta válida
+              }
+          }
+          return false;// conta inválida
     }
-
 }
