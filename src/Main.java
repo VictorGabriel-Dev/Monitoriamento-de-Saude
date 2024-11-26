@@ -1,6 +1,7 @@
-package view;
+
 import controller.LoginController;
 //import LoginView.*;
+import view.LoginView;
 
 public class Main {
     public static void main(String[] args) {
@@ -8,6 +9,6 @@ public class Main {
 
         LoginView.login(loginController);
         loginController.verificadorLogin();
-
+        // a main deve ficar fora da view o baiano
     }
 }
