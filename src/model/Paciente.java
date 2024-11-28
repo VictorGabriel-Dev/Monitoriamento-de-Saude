@@ -12,7 +12,7 @@ public class Paciente extends UsuarioModel{
     private List<Historico> historicoMedico = new ArrayList<>();
     private Medicamento medicamentos;
     private String dispositivos;
-    public Paciente(String nome, String cpf, String telefone, String email, String senha,String endereco,Date dataNascimento, List<Historico> historicoMedico, Medicamento medicamentos, String dispositivos) {
+    public Paciente(String nome, String email,String telefone,String senha,String cpf,Date dataNascimento, String endereco, List<Historico> historicoMedico, Medicamento medicamentos, String dispositivos) {
         super(email, senha);
         this.nome = nome;
         this.cpf = cpf;

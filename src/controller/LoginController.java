@@ -1,22 +1,22 @@
 package controller;
 
-import java.util.ArrayList;
-import model.UsuarioModel;
+import java.util.Scanner;
+
+import model.UsuarioRepositorio;
+import view.LoginView;
 
 public class LoginController {
-    private ArrayList<UsuarioModel> usuarios;
+    private Scanner ler;
+    private LoginView view;
+    private UsuarioRepositorio repositorio;
 
-    public LoginController(ArrayList<UsuarioModel> usuarios){
-        this.usuarios = usuarios;
+    public LoginController(){
+        this.ler = new Scanner(System.in);
+        this.view = new LoginView();
+        this.repositorio = UsuarioRepositorio.getInstance();
     }
 
-    //verificador de conta
-    public boolean validaLogin(String email, String senha){
-          for(UsuarioModel usuarioModel : usuarios){
-              if (usuarioModel.getEmail().equals(email) && usuarioModel.getSenha().equals(senha)){
-                  return true;//conta válida
-              }
-          }
-          return false;// conta inválida
+    public void login(){
+        view.imprima(ler, repositorio);
     }
 }

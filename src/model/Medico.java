@@ -6,7 +6,7 @@ public class Medico extends UsuarioModel {
     private String crm;
     private String telefone;
     public Medico(String nome,String email,String senha,String especialidade, String crm, String telefone) {
-        super( email, senha);
+        super(email, senha);
         this.nome = nome;
         this.especialidade = especialidade;
         this.crm = crm;
