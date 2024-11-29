@@ -20,7 +20,7 @@ public class HistoricoController {
     public void addHistoricoMedico(Scanner ler) {
         Historico novoHistorico = view.formAddHistorico(ler);
         paciente.addHistoricoMedico(novoHistorico);
-        System.out.println("Histórico adicionado com sucesso.");
+        view.mensagemSucesso();
     }
 
     public void consultarHistorico() {

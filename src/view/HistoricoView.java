@@ -48,4 +48,7 @@ public class HistoricoView {
         return new Historico(dataInicio, dataTermino, descricao, medicamento);
 
     }
+    public void mensagemSucesso(){
+        System.out.println("Histórico adicionado com sucesso.");
+    }
 }

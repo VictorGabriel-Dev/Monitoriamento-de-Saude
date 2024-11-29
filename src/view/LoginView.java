@@ -1,29 +1,21 @@
 package view;
 
 import java.util.Scanner;
-import controller.LoginController;
+import model.UsuarioModel;
 
 public class LoginView {
-    private LoginController controller;
-
-    public LoginView(LoginController controller) {
-        this.controller = controller;
-    }
-
-    //metodo imprimir
-    public void imprima() {
-        Scanner sc = new Scanner(System.in);
-
+    public UsuarioModel formLogin(Scanner ler) {
         System.out.println("Digite seu email: ");
-        String email = sc.nextLine();
+        String email = ler.nextLine();
         System.out.println("Digite sua senha: ");
-        String senha = sc.nextLine();
-
-        if (controller.validaLogin(email, senha)) {
-            System.out.println("Bem-vindo! ");
+        String senha = ler.nextLine();
+        return new UsuarioModel(email, senha);
+    }
+    public void mensagemAposLogin(UsuarioModel usuario){
+        if (usuario != null) {
+            System.out.println("Login bem-sucedido!");
         } else {
-            System.out.println("Login inválido. Tente novamente. ");
+            System.out.println("Credenciais inválidas. Tente novamente.");
         }
-        sc.close();
     }
 }
