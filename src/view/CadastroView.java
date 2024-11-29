@@ -8,7 +8,6 @@ import java.util.Scanner;
 import model.Historico;
 import model.Medico;
 import model.Paciente;
-import model.UsuarioRepositorio;
 
 public class CadastroView {
     public Paciente showCadastroPaciente(Scanner ler) {
@@ -17,20 +16,12 @@ public class CadastroView {
         String nome = ler.nextLine();
         System.out.print("Email: ");
         String email = ler.nextLine();
-        if (UsuarioRepositorio.getInstance().usuarioComEmailExiste(email)) {
-            System.out.println("Erro: Já existe um usuário com este email.");
-            return null;
-        }
         System.out.print("Telefone: ");
         String telefone = ler.nextLine();
         System.out.print("Senha: ");
         String senha = ler.nextLine();
         System.out.print("CPF: ");
         String cpf = ler.nextLine();
-        if (UsuarioRepositorio.getInstance().pacienteComCpfExiste(cpf)) {
-            System.out.println("Erro: Já existe um paciente com este CPF.");
-            return null;
-        }
         System.out.print("Data de Nascimento (dd/MM/yyyy): ");
         Date dataNascimento = null;
         while (dataNascimento == null) {
@@ -38,10 +29,9 @@ public class CadastroView {
             String dataNascimentoStr = ler.nextLine();
             try {
                 dataNascimento = new SimpleDateFormat("dd/MM/yyyy").parse(dataNascimentoStr);
-                // Verifica se a data é válida (não pode ser uma data futura)
                 if (dataNascimento.after(new Date())) {
                     System.out.println("Data de nascimento não pode ser no futuro.");
-                    dataNascimento = null; // Solicitar novamente
+                    dataNascimento = null;
                 }
             } catch (Exception e) {
                 System.out.println("Data inválida. Tente novamente.");
@@ -55,7 +45,6 @@ public class CadastroView {
         ler.nextLine();
         if (opcao == 1) {
             while (true) {
-
                 System.out.println("Adicionando histórico médico...");
                 System.out.print("Data de início do tratamento: ");
                 String dataInicio = ler.nextLine();
@@ -74,7 +63,6 @@ public class CadastroView {
                     break;
             }
         }
-        System.out.println("Paciente cadastrado com sucesso!");
         return new Paciente(nome, email, telefone, senha, cpf, null, endereco, historicoMedico, null, null);
 
     }
@@ -85,24 +73,26 @@ public class CadastroView {
         String nome = ler.nextLine();
         System.out.print("Email: ");
         String email = ler.nextLine();
-        if (UsuarioRepositorio.getInstance().usuarioComEmailExiste(email)) {
-            System.out.println("Erro: Já existe um usuário com este email.");
-            return null;
-        }
-        System.out.print("Telefone: ");
-        String telefone = ler.nextLine();
         System.out.print("Senha: ");
         String senha = ler.nextLine();
-        System.out.print("CRM: ");
-        String crm = ler.nextLine();
-        if (UsuarioRepositorio.getInstance().medicoComCrmExiste(crm)) {
-            System.out.println("Erro: Já existe um médico com este CRM.");
-            return null;
-        }
         System.out.print("Especialidade: ");
         String especialidade = ler.nextLine();
-        System.out.println("Médico cadastrado com sucesso!");
-        return new Medico(nome, email, telefone, senha, crm, especialidade);
+        System.out.print("CRM: ");
+        String crm = ler.nextLine();
+        System.out.print("Telefone: ");
+        String telefone = ler.nextLine();
+        return new Medico(nome, email, senha, especialidade, crm, telefone);
     }
-    
+    public void mensagemSucesso() {
+        System.out.println("Cadastro realizado com sucesso!");
+    }
+    public void mensagemCpfExistente() {
+        System.out.println("CPF já cadastrado!");
+    }
+    public void mensagemEmailExistente() {
+        System.out.println("Email já cadastrado!");
+    }
+    public void mensagemCrmExistente() {
+        System.out.println("CRM já cadastrado!");
+    }
 }

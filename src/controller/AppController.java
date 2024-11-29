@@ -1,6 +1,8 @@
 package controller;
+
 import java.util.Scanner;
 import view.AppView;
+
 public class AppController {
     private Scanner ler;
     private AppView view;
@@ -13,22 +15,23 @@ public class AppController {
         this.loginController = new LoginController();
         this.cadastroController = new CadastroController();
     }
+
     public void run() {
         int opcao;
         do {
             opcao = view.showMenu(ler);
             switch (opcao) {
                 case 1:
-                    cadastroController.cadastrarPaciente();
+                    loginController.entrar();
                     break;
                 case 2:
-                    cadastroController.cadastrarMedico();
+                    cadastroController.cadastrarPaciente();
                     break;
                 case 3:
-                    loginController.login();
+                    cadastroController.cadastrarMedico();
                     break;
                 case 4:
-                    cadastroController.exibirDadosMedico();
+                    System.out.println("Saindo...");
                     break;
                 default:
                     System.out.println("Opção inválida!");
