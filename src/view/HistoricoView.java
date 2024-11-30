@@ -6,13 +6,6 @@ import java.util.Scanner;
 import model.Historico;
 
 public class HistoricoView {
-    public int menuPaciente(Scanner ler) {
-        System.out.println("1. Consultar dados");
-        System.out.println("2. Consultar histórico");
-        System.out.println("3. Agendar consulta");
-        System.out.println("4. Sair");
-        return ler.nextInt();
-    }
     public int menuHistorico(Scanner ler) {
         System.out.println("1. Consultar histórico médico");
         System.out.println("2. Adicionar histórico médico");

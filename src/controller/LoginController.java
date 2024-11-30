@@ -2,6 +2,7 @@ package controller;
 import java.util.Scanner;
 
 import model.Paciente;
+import model.PacienteController;
 import model.Medico;
 import model.UsuarioModel;
 import model.UsuarioRepositorio;
@@ -38,13 +39,17 @@ public class LoginController {
         }
         return null;
     }
-    public void exibirMenu(){
-        if(usuarioLogado instanceof Paciente){
-            pacienteView.menuPaciente(ler);
-        }else if(usuarioLogado instanceof Medico){
-            medicoView.menuMedico(ler);
-        }
+    public void exibirMenu() {
+    if (usuarioLogado instanceof Paciente) {
+        pacienteView = new PacienteView();
+        pacienteView.menuPaciente(ler);
+        PacienteController pacienteController = new PacienteController((Paciente) usuarioLogado);
+    } else if (usuarioLogado instanceof Medico) {
+        medicoView = new MedicoView();
+        medicoView.menuMedico(ler);
     }
+}
+
     public UsuarioModel getUsuarioLogado() {
         return usuarioLogado;
     }

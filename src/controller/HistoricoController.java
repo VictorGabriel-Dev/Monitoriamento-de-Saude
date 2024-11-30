@@ -11,10 +11,9 @@ public class HistoricoController {
     private Scanner ler;
     private Paciente paciente;
 
-    public HistoricoController(Paciente paciente) {
+    public HistoricoController() {
         this.view = new HistoricoView();
         this.ler = new Scanner(System.in);
-        this.paciente = paciente;
     }
 
     public void addHistoricoMedico(Scanner ler) {
@@ -49,10 +48,10 @@ public class HistoricoController {
     public void start() {
         int opcao;
         do {
-            opcao = view.menuPaciente(ler);
+            opcao = view.menuHistorico(ler);
             switch (opcao) {
                 case 1:
-                    System.out.println("");
+                    view.exibirHistoricoMedico(paciente.getHistoricoMedico());
                     break;
                 case 2:
                     historicoMedico(ler);
