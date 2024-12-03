@@ -18,6 +18,7 @@ public class Consulta {
         this.diagnostico = diagnostico;
         this.prescricao = prescricao;
     }
+
     public String getIdConsulta() {
         return idConsulta;
     }
