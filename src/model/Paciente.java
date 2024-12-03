@@ -1,18 +1,21 @@
 package model;
-import java.sql.Date;
+
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Paciente extends UsuarioModel{
+public class Paciente extends UsuarioModel {
     private String nome;
     private String cpf;
     private String endereco;
     private String telefone;
-    private Date dataNascimento;
-    private List<Historico> historicoMedico = new ArrayList<>();
+    private LocalDate dataNascimento;
+    private List<Consulta> historicoMedico = new ArrayList<>();
     private Medicamento medicamentos;
     private String dispositivos;
-    public Paciente(String nome, String email,String telefone,String senha,String cpf,Date dataNascimento, String endereco, List<Historico> historicoMedico, Medicamento medicamentos, String dispositivos) {
+
+    public Paciente(String nome, String email, String telefone, String senha, String cpf, LocalDate dataNascimento,
+            String endereco, List<Consulta> historicoMedico, Medicamento medicamentos, String dispositivos) {
         super(email, senha);
         this.nome = nome;
         this.cpf = cpf;
@@ -23,34 +26,63 @@ public class Paciente extends UsuarioModel{
         this.medicamentos = medicamentos;
         this.dispositivos = dispositivos;
     }
+
     public String getNome() {
         return nome;
     }
+
     public String getCpf() {
         return cpf;
     }
+
     public String getEndereco() {
         return endereco;
     }
+
     public String getTelefone() {
         return telefone;
     }
-    public Date getDataNascimento() {
+
+    public LocalDate getDataNascimento() {
         return dataNascimento;
     }
-    public List<Historico> getHistoricoMedico() {
+
+    public List<Consulta> getHistoricoMedico() {
         return historicoMedico;
     }
+
     public Medicamento getMedicamentos() {
         return medicamentos;
     }
+
     public String getDispositivos() {
         return dispositivos;
     }
 
-    public void addHistoricoMedico(Historico historico) {
-        if(historico != null)
-        historicoMedico.add(historico);
+    public void setNome(String nome) {
+        this.nome = nome;
     }
-    
+
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
+    }
+
+    public void setEndereco(String endereco) {
+        this.endereco = endereco;
+    }
+
+    public void setTelefone(String telefone) {
+        this.telefone = telefone;
+    }
+
+    public void setDataNascimento(LocalDate dataNascimento) {
+        if (dataNascimento.isAfter(LocalDate.now())) {
+            throw new IllegalArgumentException("Data de nascimento não pode ser futura");
+        }
+        this.dataNascimento = dataNascimento;
+    }
+
+    public void setHistoricoMedico(List<Consulta> historicoMedico) {
+        this.historicoMedico = historicoMedico;
+    }
 }

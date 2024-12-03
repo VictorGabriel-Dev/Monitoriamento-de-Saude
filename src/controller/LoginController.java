@@ -7,14 +7,11 @@ import model.UsuarioModel;
 import model.UsuarioRepositorio;
 import view.LoginView;
 import view.MedicoView;
-import view.PacienteView;
-
 public class LoginController {
     private Scanner ler;
     private LoginView view;
     private UsuarioRepositorio repositorio;
     private UsuarioModel usuarioLogado;
-    private PacienteView pacienteView;
     private MedicoView medicoView;
 
     public LoginController() {
@@ -23,6 +20,7 @@ public class LoginController {
         this.repositorio = UsuarioRepositorio.getInstance();
         this.usuarioLogado = null;
     }
+
     public void entrar() {
         UsuarioModel usuario = view.formLogin(ler);
         UsuarioModel usuarioAutenticado = autenticarUsuario(usuario.getEmail(), usuario.getSenha());
@@ -30,23 +28,27 @@ public class LoginController {
         view.mensagemAposLogin(usuarioAutenticado);
         exibirMenu();
     }
+
     private UsuarioModel autenticarUsuario(String email, String senha) {
         for (UsuarioModel usuario : repositorio.getUsuarios()) {
-            if (usuario.getEmail().trim().equals(email)&& usuario.getSenha().trim().equals(senha)) {
+            if (usuario.getEmail().trim().equals(email) && usuario.getSenha().trim().equals(senha)) {
                 return usuario;
             }
         }
         return null;
     }
-    public void exibirMenu(){
-        if(usuarioLogado instanceof Paciente){
-            pacienteView.menuPaciente(ler);
-        }else if(usuarioLogado instanceof Medico){
+
+    public void exibirMenu() {
+        if (usuarioLogado instanceof Paciente) {
+            PacienteController pacienteController = new PacienteController((Paciente) usuarioLogado);
+            pacienteController.menu();
+        } else if (usuarioLogado instanceof Medico) {
+            medicoView = new MedicoView();
             medicoView.menuMedico(ler);
         }
     }
+
     public UsuarioModel getUsuarioLogado() {
         return usuarioLogado;
     }
-
 }
