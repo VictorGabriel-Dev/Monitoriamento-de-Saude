@@ -6,13 +6,13 @@ import model.Medico;
 import model.UsuarioModel;
 import model.UsuarioRepositorio;
 import view.LoginView;
-import view.MedicoView;
+
 public class LoginController {
     private Scanner ler;
     private LoginView view;
     private UsuarioRepositorio repositorio;
     private UsuarioModel usuarioLogado;
-    private MedicoView medicoView;
+
 
     public LoginController() {
         this.ler = new Scanner(System.in);
@@ -43,8 +43,8 @@ public class LoginController {
             PacienteController pacienteController = new PacienteController((Paciente) usuarioLogado);
             pacienteController.menu();
         } else if (usuarioLogado instanceof Medico) {
-            medicoView = new MedicoView();
-            medicoView.menuMedico(ler);
+            MedicoController medicoController = new MedicoController((Medico) usuarioLogado);
+            medicoController.menu();
         }
     }
 

@@ -1,33 +1,26 @@
 package controller;
-
 import java.util.Scanner;
-import model.Paciente;
-import view.PacienteView;
-
-public class PacienteController {
-    private Paciente paciente;
-    private ConsultaController historicoController;
-    private PacienteView pacienteView;
+import model.Medico;
+import view.MedicoView;
+public class MedicoController {
+    private Medico medico;
+    private MedicoView medicoView;
     private Scanner ler;
-
-    public PacienteController(Paciente paciente) {
-        this.paciente = paciente;
-        this.historicoController = new ConsultaController(paciente);
-        this.pacienteView = new PacienteView();
+    public MedicoController(Medico medico) {
+        this.medico = medico;
+        this.medicoView = new MedicoView();
         this.ler = new Scanner(System.in);
     }
-
-    public void dadosPaciente() {
-        pacienteView.exibirDados(paciente);
+    public void dadosMedico() {
+        medicoView.exibirDados(medico);
     }
-
     public void alterarEVoltar() {
         int opcao;
         do {
-            opcao = pacienteView.opcoesAlterarEVoltar(ler);
+            opcao = medicoView.opcoesAlterarEVoltar(ler);
             switch (opcao) {
                 case 1:
-                    pacienteView.alterarDados(ler, paciente);
+                    medicoView.alterarDados(ler, medico);
                     break;
                 case 2:
                     return;
@@ -36,25 +29,23 @@ public class PacienteController {
             }
         } while (opcao != 2);
     }
-
     public void menu() {
         int opcao;
         do {
-            opcao = pacienteView.menu(ler);
+            opcao = medicoView.menu(ler);
             switch (opcao) {
                 case 1:
-                    dadosPaciente();
+                    dadosMedico();
                     alterarEVoltar();
                     break;
                 case 2:
-                    historicoController.menuHistoricoMedico(ler);
                     break;
                 case 3:
                     break;
                 case 4:
                     return;
                 default:
-                    break;
+                    System.out.println("Opção inválida.");
             }
         } while (opcao != 4);
     }
