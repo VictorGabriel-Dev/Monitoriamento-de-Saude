@@ -1,8 +1,6 @@
 package controller;
 
 import java.util.Scanner;
-
-import model.Medico;
 import model.Paciente;
 import view.PacienteView;
 
@@ -11,14 +9,11 @@ public class PacienteController {
     private ConsultaController historicoController;
     private PacienteView pacienteView;
     private Scanner ler;
-    private Medico medico;
-
     public PacienteController(Paciente paciente) {
         this.paciente = paciente;
         this.historicoController = new ConsultaController(paciente);
         this.pacienteView = new PacienteView();
         this.ler = new Scanner(System.in);
-        this.medico = medico;
     }
 
     public void dadosPaciente() {
