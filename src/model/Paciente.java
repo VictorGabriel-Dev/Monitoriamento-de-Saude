@@ -85,4 +85,16 @@ public class Paciente extends UsuarioModel {
     public void setHistoricoMedico(List<Consulta> historicoMedico) {
         this.historicoMedico = historicoMedico;
     }
+
+    @Override
+    public String toString() {
+        return "\n********** Dados do Paciente **********\n" +
+                "Nome: " + nome + "\n" +
+                "CPF: " + cpf + "\n" +
+                "Data de Nascimento: " + dataNascimento + "\n" +
+                "Endereço: " + endereco + "\n" +
+                "Telefone: " + telefone + "\n" +
+                "E-mail: " + getEmail() + "\n";
+    }
+
 }
