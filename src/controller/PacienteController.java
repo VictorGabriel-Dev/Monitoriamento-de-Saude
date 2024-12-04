@@ -6,13 +6,13 @@ import view.PacienteView;
 
 public class PacienteController {
     private Paciente paciente;
-    private ConsultaController historicoController;
+    private ConsultaController consultaController;
     private PacienteView pacienteView;
     private Scanner ler;
 
     public PacienteController(Paciente paciente) {
         this.paciente = paciente;
-        this.historicoController = new ConsultaController(paciente);
+        this.consultaController = new ConsultaController(paciente);
         this.pacienteView = new PacienteView();
         this.ler = new Scanner(System.in);
     }
@@ -47,9 +47,10 @@ public class PacienteController {
                     alterarEVoltar();
                     break;
                 case 2:
-                    historicoController.menuHistoricoMedico(ler);
+                    consultaController.menuHistoricoMedico(ler);
                     break;
                 case 3:
+                    consultaController.consultaOpcoes(ler);
                     break;
                 case 4:
                     return;

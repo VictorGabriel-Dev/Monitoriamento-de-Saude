@@ -10,7 +10,7 @@ public class PacienteView extends BaseView<Paciente> {
         System.out.println("\n********** Menu Paciente **********");
         System.out.println("1. Consultar dados");
         System.out.println("2. Histórico");
-        System.out.println("3. Agendar consulta");
+        System.out.println("3. Consulta");
         System.out.println("4. Sair");
         return ler.nextInt();
     }
