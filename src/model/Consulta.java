@@ -41,5 +41,20 @@ public class Consulta {
     public String getPrescricao() {
         return prescricao;
     }
+    public void setDataConsulta(LocalDate dataConsulta) {
+        this.dataConsulta = dataConsulta;
+    }
+    public void setHoraConsulta(String horaConsulta) {
+        this.horaConsulta = horaConsulta;
+    }
+    public void setMedico(Medico medico) {
+        this.medico = medico;
+    }
+    public void setDiagnostico(String diagnostico) {
+        this.diagnostico = diagnostico;
+    }
+    public void setPrescricao(String prescricao) {
+        this.prescricao = prescricao;
+    }
 
 }

@@ -17,7 +17,7 @@ public abstract class BaseView<T> {
     }
 
     public boolean confirmarAlteracao(Scanner ler) {
-        System.out.println("Deseja confirmar a alteração? (1 - Sim, 2 - Não)");
+        System.out.println("Deseja confirmar? (1 - Sim, 2 - Não)");
         int opcao = ler.nextInt();
         return opcao == 1;
     }
