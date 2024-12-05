@@ -8,7 +8,10 @@ public class MedicoView extends BaseView<Medico> {
         System.out.println("1. Consultar dados");
         System.out.println("2. Plano do paciente");
         System.out.println("3. Consultar Agendamento");
-        System.out.println("4. Sair");
+        System.out.println("4. Menu dispositivo");
+        System.out.println("5. Menu Alerta");//Falta implementar
+        System.out.println("6. Menu Monitoramento");//Falta implementar
+        System.out.println("7. Sair");
         return ler.nextInt();
     }
 
