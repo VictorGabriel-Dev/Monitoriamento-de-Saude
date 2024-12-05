@@ -1,4 +1,5 @@
 package controller;
+
 import model.*;
 import view.AlertaView;
 import view.MedicoView;
@@ -13,11 +14,13 @@ public class MedicoController {
     private ArrayList<Paciente> pacientes = new ArrayList<>();
     private ArrayList<DispositivoModel> dispositivos = new ArrayList<>();
     private DispositivoController dispositivoController;
+
     public MedicoController(Medico medico) {
         this.medico = medico;
         this.medicoView = new MedicoView();
         this.consultaController = new ConsultaController(null);
         this.dispositivoController = new DispositivoController();
+
     }
     public void dadosMedico() {
         medicoView.exibirDados(medico);
@@ -82,6 +85,7 @@ public class MedicoController {
             System.out.println("Não há consultas agendadas.");
         }
     }
+
 
     //metodo lista de paciente
     public static Paciente selecionarPaciente(List<Paciente> pacientes) {

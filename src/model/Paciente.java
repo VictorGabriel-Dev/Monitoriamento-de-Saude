@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Paciente extends UsuarioModel {
- //   private ArrayList<Paciente> pacientes = new ArrayList<>();
-
     private String nome;
     private String cpf;
     private String endereco;
