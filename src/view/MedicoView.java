@@ -1,12 +1,9 @@
 package view;
-
-import java.util.Scanner;
 import model.Medico;
 
 public class MedicoView extends BaseView<Medico> {
-
     @Override
-    public int menu(Scanner ler) {
+    public int menu() {
         System.out.println("\n********** Menu Medico **********");
         System.out.println("1. Consultar dados");
         System.out.println("2. Plano do paciente");
@@ -16,7 +13,7 @@ public class MedicoView extends BaseView<Medico> {
     }
 
     @Override
-    public int selecionarQualAlterar(Scanner ler) {
+    public int selecionarQualAlterar() {
         System.out.println("\n********** Alterar Dados **********");
         System.out.println("1 - Nome");
         System.out.println("2 - Especialidade");
@@ -29,10 +26,10 @@ public class MedicoView extends BaseView<Medico> {
     }
 
     @Override
-    public void alterarDados(Scanner ler, Medico medico) {
+    public void alterarDados(Medico medico) {
         int opcao;
         do {
-            opcao = selecionarQualAlterar(ler);
+            opcao = selecionarQualAlterar();
             ler.nextLine();
             String dadoAnterior = null;
             boolean confirmacao = false;
@@ -40,32 +37,32 @@ public class MedicoView extends BaseView<Medico> {
             switch (opcao) {
                 case 1:
                     dadoAnterior = medico.getNome();
-                    medico.setNome(solicitarEntrada(ler, "Digite o novo nome: "));
-                    confirmacao = confirmarAlteracao(ler);
+                    medico.setNome(solicitarEntrada("Digite o novo nome: "));
+                    confirmacao = confirmarAlteracao();
                     if (!confirmacao) medico.setNome(dadoAnterior);
                     break;
                 case 2:
                     dadoAnterior = medico.getEspecialidade();
-                    medico.setEspecialidade(solicitarEntrada(ler, "Digite a nova especialidade: "));
-                    confirmacao = confirmarAlteracao(ler);
+                    medico.setEspecialidade(solicitarEntrada("Digite a nova especialidade: "));
+                    confirmacao = confirmarAlteracao();
                     if (!confirmacao) medico.setEspecialidade(dadoAnterior);
                     break;
                 case 3:
                     dadoAnterior = medico.getCrm();
-                    medico.setCrm(solicitarEntrada(ler, "Digite o novo CRM: "));
-                    confirmacao = confirmarAlteracao(ler);
+                    medico.setCrm(solicitarEntrada( "Digite o novo CRM: "));
+                    confirmacao = confirmarAlteracao();
                     if (!confirmacao) medico.setCrm(dadoAnterior);
                     break;
                 case 4:
                     dadoAnterior = medico.getTelefone();
-                    medico.setTelefone(solicitarEntrada(ler, "Digite o novo telefone: "));
-                    confirmacao = confirmarAlteracao(ler);
+                    medico.setTelefone(solicitarEntrada( "Digite o novo telefone: "));
+                    confirmacao = confirmarAlteracao();
                     if (!confirmacao) medico.setTelefone(dadoAnterior);
                     break;
                 case 5:
                     dadoAnterior = medico.getEmail();
-                    medico.setEmail(solicitarEntrada(ler, "Digite o novo e-mail: "));
-                    confirmacao = confirmarAlteracao(ler);
+                    medico.setEmail(solicitarEntrada( "Digite o novo e-mail: "));
+                    confirmacao = confirmarAlteracao();
                     if (!confirmacao) medico.setEmail(dadoAnterior);
                     break;
                 case 6:
@@ -79,4 +76,5 @@ public class MedicoView extends BaseView<Medico> {
 
         } while (opcao != 6);
     }
+
 }

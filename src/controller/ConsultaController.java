@@ -46,22 +46,22 @@ public class ConsultaController {
     }
 
     public void confirmarConsulta(Consulta consulta) {
+        // Adiciona a consulta ao histórico do paciente
         this.consultas.add(consulta);
         view.mensagemSucesso();
-    }
 
-    public void editarConsulta(Scanner ler, Consulta consulta) {
-        Consulta novaConsulta = view.formAddConsulta(ler, paciente, medicosDisponiveis, consultas);
-    
-        if (novaConsulta != null) {
-            consulta.setDataConsulta(novaConsulta.getDataConsulta());
-            consulta.setHoraConsulta(novaConsulta.getHoraConsulta());
-            consulta.setMedico(novaConsulta.getMedico());
-            view.mensagemSucesso();
-        } else {
-            view.exibirMensagemErro("Não foi possível editar a consulta devido a um conflito de horário ou erro de entrada.");
+        // Aqui, você pode adicionar a consulta ao histórico do médico
+        Medico medico = consulta.getMedico();
+        if (medico != null) {
+            // Se o médico não tiver um histórico de consultas, inicialize a lista
+            if (medico.getConsultas() == null) {
+                medico.setConsultas(new ArrayList<>());
+            }
+            medico.getConsultas().add(consulta);
+            System.out.println("Consulta agendada com sucesso para o médico " + medico.getNome());
         }
     }
+
 
     public void cancelarConsulta(Consulta consulta) {
         this.consultas.remove(consulta);
@@ -77,17 +77,14 @@ public class ConsultaController {
                     confirmarConsulta(consulta);
                     return;
                 case 2:
-                    editarConsulta(ler, consulta);
-                    return;
-                case 3:
                     cancelarConsulta(consulta);
                     return;
-                case 4:
+                case 3:
                     return;
                 default:
                     System.out.println("Opção inválida.");
             }
-        } while (opcao != 4);
+        } while (opcao != 3);
     }
     public void consultarAgendamentos() {
         view.exibirAgendamentos(consultas);

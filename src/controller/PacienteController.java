@@ -24,10 +24,10 @@ public class PacienteController {
     public void alterarEVoltar() {
         int opcao;
         do {
-            opcao = pacienteView.opcoesAlterarEVoltar(ler);
+            opcao = pacienteView.opcoesAlterarEVoltar();
             switch (opcao) {
                 case 1:
-                    pacienteView.alterarDados(ler, paciente);
+                    pacienteView.alterarDados(paciente);
                     break;
                 case 2:
                     return;
@@ -40,7 +40,7 @@ public class PacienteController {
     public void menu() {
         int opcao;
         do {
-            opcao = pacienteView.menu(ler);
+            opcao = pacienteView.menu();
             switch (opcao) {
                 case 1:
                     dadosPaciente();

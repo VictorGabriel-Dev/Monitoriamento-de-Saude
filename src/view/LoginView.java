@@ -18,4 +18,7 @@ public class LoginView {
             System.out.println("Credenciais inválidas. Tente novamente.");
         }
     }
+    public void mensagemErroAutenticacao() {
+        System.out.println("Erro ao autenticar usuário. Verifique suas credenciais.");
+    }
 }

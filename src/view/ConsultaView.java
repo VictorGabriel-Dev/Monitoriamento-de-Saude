@@ -3,7 +3,6 @@ package view;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -14,9 +13,8 @@ import model.Paciente;
 import java.util.stream.IntStream;
 
 
-public class ConsultaView extends BaseView<Consulta> {
+public class ConsultaView {
 
-    @Override
     public int menu(Scanner ler) {
         System.out.println("\n********** Menu Histórico Médico **********");
         System.out.println("1. Consultar histórico médico");
@@ -165,40 +163,10 @@ public class ConsultaView extends BaseView<Consulta> {
     public int opcoesDepoisDeAgendarConsulta(Scanner ler) {
         System.out.println("\n********** Menu Agendar Consulta **********");
         System.out.println("1. Confirmar Consulta");
-        System.out.println("2. Editar Consulta");
-        System.out.println("3. Cancelar Consulta");
+        System.out.println("2. Cancelar Consulta");
         return ler.nextInt();
     }
 
-    public int selecionarQualAlterar(Scanner ler) {
-        System.out.println("\n********** Menu Editar Consulta **********");
-        System.out.println("1. Data da Consulta");
-        System.out.println("2. Hora da Consulta");
-        System.out.println("3. Médico");
-        return ler.nextInt();
-    }
-
-    @Override
-    public void alterarDados(Scanner ler, Consulta consulta) {
-        int opcao;
-        do {
-            opcao = selecionarQualAlterar(ler);
-            ler.nextLine();  // Limpar o buffer
-            switch (opcao) {
-                case 1:
-                    consulta.setDataConsulta(LocalDate.parse(solicitarEntrada(ler, "Nova Data da Consulta")));
-                    break;
-                case 2:
-                    consulta.setHoraConsulta(solicitarEntrada(ler, "Nova Hora da Consulta"));
-                    break;
-                case 3:
-                    consulta.setMedico(escolherMedico(ler, null));
-                    break;
-                default:
-                    System.out.println("Opção inválida.");
-            }
-        } while (opcao != 0);
-    }
 
     public void mensagemSucesso() {
         System.out.println("\nConsulta agendada com sucesso.");
