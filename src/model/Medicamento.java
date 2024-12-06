@@ -34,4 +34,23 @@ public class Medicamento {
     public String getDataPrescricao() {
         return dataPrescricao;
     }
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+    public void setDosagem(String dosagem) {
+        this.dosagem = dosagem;
+    }
+    public void setFrequencia(String frequencia) {
+        this.frequencia = frequencia;
+    }
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
+    }
+    public void setMedico(Medico medico) {
+        this.medico = medico;
+    }
+    public void setDataPrescricao(String dataPrescricao) {
+        this.dataPrescricao = dataPrescricao;
+    }
+    
 }

@@ -1,7 +1,5 @@
 package controller;
 
-import java.util.Scanner;
-
 import model.Medico;
 import model.Paciente;
 import model.UsuarioRepositorio;
@@ -9,17 +7,15 @@ import view.CadastroView;
 
 public class CadastroController{
     private CadastroView view;
-    private Scanner ler;
     private UsuarioRepositorio repositorio;
     
     public CadastroController() {
         this.view = new CadastroView();
-        this.ler = new Scanner(System.in);
         this.repositorio = UsuarioRepositorio.getInstance();
     }
 
     public void cadastrarPaciente() {
-        Paciente paciente = view.showCadastroPaciente(ler);
+        Paciente paciente = view.showCadastroPaciente();
         if(repositorio.verificaSeEmailExiste(paciente.getEmail())){
             view.mensagemEmailExistente();
             return;
@@ -33,7 +29,7 @@ public class CadastroController{
     }
 
     public void cadastrarMedico() {
-        Medico medico = view.showCadastroMedico(ler);
+        Medico medico = view.showCadastroMedico();
         if(repositorio.verificaSeEmailExiste(medico.getEmail())){
             view.mensagemEmailExistente();
             return;
@@ -46,10 +42,5 @@ public class CadastroController{
         repositorio.adicionarUsuario(medico);
         
     }
-
-    
-    // public void exibirDadosMedico() {
-    //     UsuarioRepositorio.getInstance().exibirDadosMedico();
-    // }
 
 }

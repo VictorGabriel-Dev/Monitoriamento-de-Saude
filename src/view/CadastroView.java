@@ -9,14 +9,18 @@ import model.Paciente;
 import java.time.LocalDate;
 import java.time.ZoneId;
 
-
 public class CadastroView {
-
-    public Paciente showCadastroPaciente(Scanner ler) {
+    private Scanner ler = new Scanner(System.in);
+    public Paciente showCadastroPaciente() {
         System.out.println("=== Cadastro de Paciente ===");
 
         System.out.print("Nome: ");
         String nome = ler.nextLine();
+        while (nome.trim().isEmpty() || nome.length() < 2) {
+            System.out.println("Nome inválido! O nome deve ter pelo menos 2 caracteres.");
+            System.out.print("Nome: ");
+            nome = ler.nextLine();
+        }
 
         String email = "";
         boolean emailValido = false;
@@ -79,11 +83,16 @@ public class CadastroView {
         return new Paciente(nome, email, telefone, senha, cpf, dataNascimentoLocalDate, endereco, null, null, null);
     }
 
-    public Medico showCadastroMedico(Scanner ler) {
+    public Medico showCadastroMedico() {
         System.out.println("=== Cadastro de Médico ===");
 
         System.out.print("Nome: ");
         String nome = ler.nextLine();
+        while (nome.trim().isEmpty() || nome.length() < 2) {
+            System.out.println("Nome inválido! O nome deve ter pelo menos 2 caracteres.");
+            System.out.print("Nome: ");
+            nome = ler.nextLine();
+        }
 
         String email = "";
         boolean emailValido = false;
@@ -107,12 +116,16 @@ public class CadastroView {
 
         System.out.print("Especialidade: ");
         String especialidade = ler.nextLine();
+        while (especialidade.trim().isEmpty()) {
+            System.out.println("Especialidade inválida! A especialidade não pode ser vazia.");
+            System.out.print("Especialidade: ");
+            especialidade = ler.nextLine();
+        }
 
         System.out.print("CRM: ");
         String crm = ler.nextLine();
-
         while (!validarCrm(crm)) {
-            System.out.println("CRM inválido! Digite um CRM válido.");
+            System.out.println("CRM inválido! O CRM deve ser composto por 6 dígitos.");
             System.out.print("CRM: ");
             crm = ler.nextLine();
         }
@@ -145,8 +158,10 @@ public class CadastroView {
     }
 
     private boolean validarEmail(String email) {
-        return email.contains("@") && email.endsWith(".com");
+        String regex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
+        return email.matches(regex);
     }
+    
 
     private boolean validarTelefone(String telefone) {
         String regex = "\\(\\d{2}\\) \\d{5}-\\d{4}";
