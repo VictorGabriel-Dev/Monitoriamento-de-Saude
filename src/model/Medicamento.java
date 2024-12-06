@@ -52,5 +52,4 @@ public class Medicamento {
     public void setDataPrescricao(String dataPrescricao) {
         this.dataPrescricao = dataPrescricao;
     }
-    
 }

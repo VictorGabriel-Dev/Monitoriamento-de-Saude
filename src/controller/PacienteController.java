@@ -1,3 +1,4 @@
+
 package controller;
 
 import java.util.Scanner;
@@ -113,3 +114,4 @@ public class PacienteController extends BaseController<Paciente> {
         } while (opcao != 4);
     }
 }
+

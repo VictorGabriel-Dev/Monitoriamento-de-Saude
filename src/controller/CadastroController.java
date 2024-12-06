@@ -48,5 +48,4 @@ public class CadastroController{
         repositorio.adicionarUsuario(medico);
         
     }
-
 }

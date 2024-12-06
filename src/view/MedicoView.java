@@ -98,4 +98,3 @@ public class MedicoView extends BaseView<Medico> {
         return ler.nextInt();
     }
 }
-

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Paciente extends UsuarioModel {
+    private static List<String> nomesCadastrados = new ArrayList<>();
     private String nome;
     private String cpf;
     private String endereco;
@@ -25,6 +26,12 @@ public class Paciente extends UsuarioModel {
         this.historicoMedico = (historicoMedico != null) ? historicoMedico : new ArrayList<>();
         this.medicamentos = medicamentos;
         this.dispositivos = dispositivos;
+
+        // Adiciona o nome á lista
+        nomesCadastrados.add(nome);
+    }
+    public static List<String> getNomesCadastrados(){
+        return nomesCadastrados;
     }
 
     public String getNome() {
