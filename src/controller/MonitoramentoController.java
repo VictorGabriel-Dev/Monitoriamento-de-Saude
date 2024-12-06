@@ -1,19 +1,20 @@
 package controller;
 
 import model.*;
-import controller.*;
-
 import java.util.*;
 
 public class MonitoramentoController {
     ArrayList<Paciente> pacientes = new ArrayList<>();
+    private UsuarioRepositorio repositorio;
+    private Scanner sc;
 
     public MonitoramentoController(ArrayList<Paciente> pacientes) {
         this.pacientes = pacientes;
+        this.repositorio = UsuarioRepositorio.getInstance();
+        this.sc = new Scanner(System.in);
     }
 
     public void menuMonitoramento() {
-        Scanner sc = new Scanner(System.in);
         System.out.println("--- Menu Monitoramento ---");
         System.out.println("1. Dados de monitoração");
         System.out.println("2. Análise");
@@ -23,7 +24,7 @@ public class MonitoramentoController {
 
         switch (escolha) {
             case 1://tem um pequeno problema na lista, ela nao esta puxando a lista de pacientes
-                MedicoController.selecionarPaciente(pacientes);
+                exibirPacientes();
                 break;
             case 2:
                 Analise();
@@ -38,7 +39,6 @@ public class MonitoramentoController {
 //É necessario fazer a integração com as outras classes
     //Menu Analise
     public void Analise() {
-        Scanner sc = new Scanner(System.in);
         int escolha = 9;
         do {
             System.out.println("\n--- Menu Analise ---");
@@ -69,4 +69,17 @@ public class MonitoramentoController {
             }
         } while (escolha != 0);
     }
+    public void exibirPacientes() {
+    if (pacientes.isEmpty()) {
+        System.out.println("Nenhum paciente para monitorar.");
+        return;
+    }
+
+    System.out.println("\n--- Lista de Pacientes Monitorados ---");
+    for (int i = 0; i < pacientes.size(); i++) {
+        Paciente paciente = pacientes.get(i);
+        System.out.println((i + 1) + ". " + paciente.getNome() + " (CPF: " + paciente.getCpf() + ")");
+    }
+}
+
 }
