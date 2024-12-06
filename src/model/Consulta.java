@@ -1,5 +1,8 @@
 package model;
 import java.time.LocalDate;
+import java.util.List;
+import java.util.ArrayList;
+
 import utils.IdGenerator;
 public class Consulta {
     private String idConsulta; 
@@ -7,16 +10,16 @@ public class Consulta {
     private String horaConsulta;
     private Paciente paciente;
     private Medico medico;
-    private String diagnostico;
+    private List<String> diagnostico;
     private String prescricao;
 
-    public Consulta(LocalDate dataConsulta, String horaConsulta, Paciente paciente, Medico medico, String diagnostico, String prescricao) {
+    public Consulta(LocalDate dataConsulta, String horaConsulta, Paciente paciente, Medico medico, List<String> diagnostico, String prescricao) {
         this.idConsulta = new IdGenerator().gerarIdConsulta();
         this.dataConsulta = dataConsulta;
         this.horaConsulta = horaConsulta;
         this.medico = medico;
         this.paciente = paciente;
-        this.diagnostico = diagnostico;
+        this.diagnostico = new ArrayList<>();
         this.prescricao = prescricao;
     }
 
@@ -35,7 +38,7 @@ public class Consulta {
     public Paciente getPaciente() {
         return paciente;
     }
-    public String getDiagnostico() {
+    public List<String> getDiagnostico() {
         return diagnostico;
     }
     public String getPrescricao() {
@@ -50,11 +53,18 @@ public class Consulta {
     public void setMedico(Medico medico) {
         this.medico = medico;
     }
-    public void setDiagnostico(String diagnostico) {
+    public void setDiagnostico(List<String> diagnostico) {
         this.diagnostico = diagnostico;
     }
     public void setPrescricao(String prescricao) {
         this.prescricao = prescricao;
     }
-
+    public void adicionarDiagnostico(String diagnostico) {
+        this.diagnostico.add(diagnostico);
+    }
+    public void alterarDiagnostico(int indice, String novoDiagnostico) {
+        if (indice >= 0 && indice < diagnostico.size()) {
+            diagnostico.set(indice, novoDiagnostico);
+        }
+    }
 }

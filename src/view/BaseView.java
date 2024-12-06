@@ -35,5 +35,4 @@ public abstract class BaseView<T> {
 
     public abstract int menu();
     public abstract int selecionarQualAlterar();
-    public abstract void alterarDados(T entity);
 }
