@@ -16,6 +16,9 @@ public class CadastroController{
 
     public void cadastrarPaciente() {
         Paciente paciente = view.showCadastroPaciente();
+        if(paciente == null){
+            return;
+        }
         if(repositorio.verificaSeEmailExiste(paciente.getEmail())){
             view.mensagemEmailExistente();
             return;
@@ -30,6 +33,9 @@ public class CadastroController{
 
     public void cadastrarMedico() {
         Medico medico = view.showCadastroMedico();
+        if(medico == null){
+            return;
+        }
         if(repositorio.verificaSeEmailExiste(medico.getEmail())){
             view.mensagemEmailExistente();
             return;
