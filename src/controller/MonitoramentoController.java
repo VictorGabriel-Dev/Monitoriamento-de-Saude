@@ -2,61 +2,43 @@
 package controller;
 
 import model.*;
-import controller.*;
-import view.AlertaView;
-import view.DispositivoView;
 import view.MonitoramentoView;
 
 import java.util.*;
 
 public class MonitoramentoController {
     private MonitoramentoView view;
-    private MedicoController medicoController;
-    private Medico medico;
-    private Paciente pacienteSelecionado;
+    private Paciente paciente;
+    ArrayList<Paciente> pacientes = new ArrayList<>();
     private AlertaMenuController alertaController;
     private ConsultaController consultaController;
+    private Scanner sc;
 
-    private Scanner sc = new Scanner(System.in);
+    public MonitoramentoController(List<Paciente> pacientes) {
+        this.sc = new Scanner(System.in);
+        this.pacientes = new ArrayList<>();
 
-    public MonitoramentoController(MonitoramentoView view, MedicoController medicoController) {
-        this.view = view;
-        this.medicoController = medicoController;
-        // Lista alertas
-        AlertaView alertaView = new AlertaView();
-        List<AlertaModel> alertas = new ArrayList<>();
-        this.alertaController = new AlertaMenuController(alertaView,alertas);
-        // Lista historico
-        List<Consulta> consultas = new ArrayList<>();
-        this.consultaController = new ConsultaController(pacienteSelecionado);
-        // Lista Medicamentos
-        List<Paciente> medicamento = new ArrayList<>();
     }
 
     public void menuMonitoramento() {
-        boolean continuar = true;
-        //Selecionar paciente
-        String pacienteSelecionado = medicoController.selecionePaciente();
-        if (pacienteSelecionado != null) {
-            System.out.printf("\nPaciente selecionado: %s",pacienteSelecionado);
-            System.out.println();
-        }
+        System.out.println("--- Menu Monitoramento ---");
+        System.out.println("1. Dados de monitoração");
+        System.out.println("2. Análise");
+        System.out.println("3. Sair");
+        int escolha = sc.nextInt();
+        sc.nextLine();
 
-        while(continuar){
-            int escolha = view.exibirMenuMonitoramento();
-            switch (escolha) {
-                case 1:
-                    medicoController.dadosMedico();
-                    break;
-                case 2:
-                    Analise();
-                    break;
-                case 3:
-                    continuar = false;
-                    break;
-                default:
-                    view.exibirMensagem("Valor inválido!");
-            }
+        switch (escolha) {
+            case 1://tem um pequeno problema na lista, ela nao esta puxando a lista de pacientes
+                exibirPacientes();
+                break;
+            case 2:
+                Analise();
+                break;
+            case 3:
+                return;
+            default:
+                System.out.println("Valor inválido!");
         }
     }
 
@@ -86,7 +68,7 @@ public class MonitoramentoController {
                 case 2:
                     try {
                         view.exibirMensagem("\n--- Medicamentos ---");
-                        exibirMedicamentos(pacienteSelecionado);
+                        exibirMedicamentos(paciente);
                     } catch (Exception e) {
                         view.exibirMensagem("Método de exibição de medicamentos não implementado ainda.");
                     }
@@ -94,7 +76,7 @@ public class MonitoramentoController {
                 case 3:
                     try {
                         view.exibirMensagem("\n--- Diagnosticos ---");
-                        exibirDiagnostico(pacienteSelecionado);
+                        exibirDiagnostico(paciente);
                     } catch (Exception e) {
                         view.exibirMensagem("Método de exibição de diagnósticos não implementado ainda.");
                     }
@@ -115,11 +97,11 @@ public class MonitoramentoController {
         } while (escolha != 0);
     }
     public void exibirMedicamentos(Paciente paciente){
-        Medicamento medicamento = paciente.getMedicamentos();
+        List<Medicamento> medicamento = paciente.getMedicamentos();
         if(medicamento == null){
             view.exibirMensagem("Nenhum medicamento registrado para esse paciente.");
         } else{
-            view.dadosMedicamento(medicamento);
+            view.dadosMedicamento(null);
         }
     }
     public void exibirDiagnostico(Paciente paciente){
@@ -131,6 +113,17 @@ public class MonitoramentoController {
                 Consulta consulta = consultas.get(i);
                 System.out.printf("[%d] - Diagnóstico: %s%n", i + 1, consulta.getDiagnostico());
             }
+        }
+    }
+    public void exibirPacientes() {
+        if (pacientes.isEmpty()) {
+            System.out.println("Nenhum paciente para monitorar.");
+            return;
+        }
+        System.out.println("\n--- Lista de Pacientes Monitorados ---");
+        for (int i = 0; i < pacientes.size(); i++) {
+            Paciente paciente = pacientes.get(i);
+            System.out.println((i + 1) + ". " + paciente.getNome() + " (CPF: " + paciente.getCpf() + ")");
         }
     }
 }

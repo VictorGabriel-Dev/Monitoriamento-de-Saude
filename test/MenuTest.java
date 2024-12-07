@@ -1,13 +1,18 @@
-public class MenuTest {
-    import static org.mockito.Mockito.*;
+
+import static org.mockito.Mockito.*;
 import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
+
+import controller.DispositivoController;
+import model.DispositivoModel;
+import view.DispositivoView;
+import java.util.ArrayList;
 import java.util.List;
 
     public class MenuTest {
 
-        private Menu menu;
+        private DispositivoController menu;
         private DispositivoView dispositivoViewMock;
         private List<DispositivoModel> dispositivos;
 
@@ -50,7 +55,7 @@ import java.util.List;
         @Test
         public void testCadastrarDispositivoComStatusInativo() {
             // Mock para os retornos dos métodos da DispositivoView com status "Inativo"
-            when(dispositivoViewMock.selecionarTipo()).thenReturn(new String[]{"Sensor", "Celsius"});
+            When(dispositivoViewMock.selecionarTipo()).thenReturn(new String[]{"Sensor", "Celsius"});
             when(dispositivoViewMock.selecionarStatus()).thenReturn("Inativo");
             when(dispositivoViewMock.solicitarEntrada("Marca:")).thenReturn("MarcaTeste");
             when(dispositivoViewMock.solicitarEntrada("Modelo:")).thenReturn("ModeloTeste");
@@ -73,4 +78,4 @@ import java.util.List;
         }
     }
 
-}
+

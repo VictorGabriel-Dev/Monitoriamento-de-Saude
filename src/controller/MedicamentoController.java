@@ -55,7 +55,7 @@ public class MedicamentoController {
         medicamentoView.exibirMedicamento(medicamento);
     }
 
-    private Medicamento buscarMedicamento(String nome) {
+    public Medicamento buscarMedicamento(String nome) {
         return prescricoes.stream()
                 .filter(medicamento -> medicamento.getNome().equalsIgnoreCase(nome))
                 .findFirst()

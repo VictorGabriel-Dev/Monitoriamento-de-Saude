@@ -12,9 +12,8 @@ public class AlertaMenuController {
     private List<AlertaModel> alertas = new ArrayList<>();
     private AlertaView view;
 
-    public AlertaMenuController(AlertaView view, List<AlertaModel> alertas) {
+    public AlertaMenuController(AlertaView view) {
         this.view = view;
-        this.alertas = alertas;
     }
 
 
