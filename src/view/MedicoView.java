@@ -3,6 +3,7 @@ package view;
 import java.util.List;
 
 import model.Consulta;
+import model.Medicamento;
 import model.Medico;
 
 public class MedicoView extends BaseView<Medico> {
@@ -81,13 +82,29 @@ public class MedicoView extends BaseView<Medico> {
     }
     
 
-    public void exibirDetalhesConsulta(Consulta consulta) {
-        System.out.println("\nDetalhes da consulta:");
-        System.out.println("Paciente: " + consulta.getPaciente().getNome());
-        System.out.println("Data da consulta: " + consulta.getDataConsulta());
-        System.out.println("Diagnóstico: " + String.join(", ", consulta.getDiagnostico()));
-        System.out.println("Prescrição: " + consulta.getPrescricao());
+public void exibirDetalhesConsulta(Consulta consulta) {
+    System.out.println("\nDetalhes da consulta:");
+    System.out.println("Paciente: " + consulta.getPaciente().getNome());
+    System.out.println("Data da consulta: " + consulta.getDataConsulta());
+    System.out.println("Diagnóstico: " + String.join(", ", consulta.getDiagnostico()));
+    System.out.println("Prescrição: " + consulta.getPrescricao());
+
+    // Exibir os medicamentos prescritos
+    if (consulta.getPrescricao() != null && !consulta.getPrescricao().isEmpty()) {
+        System.out.println("\nMedicamentos Prescritos:");
+        for (Medicamento medicamento : consulta.getPrescricao()) {
+            System.out.println("Nome: " + medicamento.getNome());
+            System.out.println("Dosagem: " + medicamento.getDosagem());
+            System.out.println("Frequência: " + medicamento.getFrequencia());
+            System.out.println("Descrição: " + medicamento.getDescricao());
+            System.out.println("Data de Prescrição: " + medicamento.getDataPrescricao());
+            System.out.println("-----------------------------");
+        }
+    } else {
+        System.out.println("Nenhum medicamento prescrito.");
     }
+}
+
     
     public int exibirOpcoesConsulta() {
         System.out.println("\nO que deseja fazer?");

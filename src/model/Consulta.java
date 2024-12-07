@@ -11,16 +11,16 @@ public class Consulta {
     private Paciente paciente;
     private Medico medico;
     private List<String> diagnostico;
-    private String prescricao;
+    private List<Medicamento> prescricao;
 
-    public Consulta(LocalDate dataConsulta, String horaConsulta, Paciente paciente, Medico medico, List<String> diagnostico, String prescricao) {
+    public Consulta(LocalDate dataConsulta, String horaConsulta, Paciente paciente, Medico medico, List<String> diagnostico, List<Medicamento> prescricao) {
         this.idConsulta = new IdGenerator().gerarIdConsulta();
         this.dataConsulta = dataConsulta;
         this.horaConsulta = horaConsulta;
         this.medico = medico;
         this.paciente = paciente;
         this.diagnostico = new ArrayList<>();
-        this.prescricao = prescricao;
+        this.prescricao = new ArrayList<>();
     }
 
     public String getIdConsulta() {
@@ -41,7 +41,7 @@ public class Consulta {
     public List<String> getDiagnostico() {
         return diagnostico;
     }
-    public String getPrescricao() {
+    public List<Medicamento> getPrescricao() {
         return prescricao;
     }
     public void setDataConsulta(LocalDate dataConsulta) {
@@ -56,7 +56,7 @@ public class Consulta {
     public void setDiagnostico(List<String> diagnostico) {
         this.diagnostico = diagnostico;
     }
-    public void setPrescricao(String prescricao) {
+    public void setPrescricao(List<Medicamento> prescricao) {
         this.prescricao = prescricao;
     }
     public void adicionarDiagnostico(String diagnostico) {
@@ -66,5 +66,8 @@ public class Consulta {
         if (indice >= 0 && indice < diagnostico.size()) {
             diagnostico.set(indice, novoDiagnostico);
         }
+    }
+    public void adicionarMedicamento(Medicamento medicamento) {
+        this.prescricao.add(medicamento);
     }
 }

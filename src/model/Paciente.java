@@ -12,11 +12,11 @@ public class Paciente extends UsuarioModel {
     private String telefone;
     private LocalDate dataNascimento;
     private List<Consulta> historicoMedico = new ArrayList<>();
-    private Medicamento medicamentos;
+    private List<Medicamento> medicamentos;
     private String dispositivos;
 
     public Paciente(String nome, String email, String telefone, String senha, String cpf, LocalDate dataNascimento,
-            String endereco, List<Consulta> historicoMedico, Medicamento medicamentos, String dispositivos) {
+            String endereco, List<Consulta> historicoMedico, List<Medicamento> medicamentos, String dispositivos) {
         super(email, senha);
         this.nome = nome;
         this.cpf = cpf;
@@ -24,7 +24,7 @@ public class Paciente extends UsuarioModel {
         this.telefone = telefone;
         this.dataNascimento = dataNascimento;
         this.historicoMedico = (historicoMedico != null) ? historicoMedico : new ArrayList<>();
-        this.medicamentos = medicamentos;
+        this.medicamentos = new ArrayList<>();
         this.dispositivos = dispositivos;
 
         // Adiciona o nome á lista
@@ -58,7 +58,7 @@ public class Paciente extends UsuarioModel {
         return historicoMedico;
     }
 
-    public Medicamento getMedicamentos() {
+    public List<Medicamento> getMedicamentos() {
         return medicamentos;
     }
 
@@ -103,5 +103,7 @@ public class Paciente extends UsuarioModel {
                 "Telefone: " + telefone + "\n" +
                 "E-mail: " + getEmail() + "\n";
     }
-
+    public void adicionarAoPlano(Medicamento medicamentos) {
+        this.medicamentos.add(medicamentos);
+    }
 }

@@ -2,6 +2,7 @@ package controller;
 
 import model.*;
 import view.AlertaView;
+import view.MedicamentoView;
 import view.MedicoView;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,21 +12,19 @@ public class MedicoController extends BaseController<Medico> {
     private Scanner sc;
     private Medico medico;
     private MedicoView medicoView;
-    private ConsultaController consultaController;
     private ArrayList<Paciente> pacientes = new ArrayList<>();
-    private ArrayList<DispositivoModel> dispositivos = new ArrayList<>();
     private DispositivoController dispositivoController;
     private UsuarioRepositorio repositorio;
+    private MedicamentoView medicamentoView;
 
     public MedicoController(Medico medico) {
         this.medico = medico;
         this.medicoView = new MedicoView();
-        this.consultaController = new ConsultaController(null);
         this.dispositivoController = new DispositivoController();
         this.pacientes = new ArrayList<>();
-        this.dispositivos = new ArrayList<>();
         this.sc = new Scanner(System.in);
         this.repositorio = UsuarioRepositorio.getInstance();
+        this.medicamentoView = new MedicamentoView();
     }
 
     public void dadosMedico() {
@@ -115,7 +114,7 @@ public class MedicoController extends BaseController<Medico> {
                     alterarEVoltar();
                     break;
                 case 2:
-                    selecionarPaciente();
+                    selecionarPaciente();// plano do paciente
                     break;
                 case 3:
                     consultarAgendamentos();
@@ -192,11 +191,17 @@ public class MedicoController extends BaseController<Medico> {
     }
 
     public void registrarPrescricao(Consulta consulta) {
-        System.out.println("Digite a prescrição para o paciente " + consulta.getPaciente().getNome() + ": ");
-        String prescricao = sc.nextLine();
-        consulta.setPrescricao(prescricao);
-        System.out.println("Prescrição registrada!");
+        Medicamento medicamento = medicamentoView.formPrescreverMedicamento();
+        
+        if (medicamento != null) {
+            consulta.adicionarMedicamento(medicamento);
+            consulta.getPaciente().adicionarAoPlano(medicamento); // Adiciona o medicamento ao plano do paciente
+            System.out.println("Prescrição registrada com sucesso!");
+        } else {
+            System.out.println("Prescrição não registrada.");
+        }
     }
+    
 
     public Paciente selecionarPaciente() {
         List<UsuarioModel> usuarios = repositorio.getUsuarios();
@@ -235,5 +240,15 @@ public class MedicoController extends BaseController<Medico> {
 
         return pacientes.get(escolha - 1);
     }
-
+    public void exibirPlanoTratamento(Paciente paciente) {
+        System.out.println("Plano de Tratamento do Paciente " + paciente.getNome() + ":");
+        if (paciente.getMedicamentos().isEmpty()) {
+            System.out.println("Nenhum medicamento registrado.");
+        } else {
+            for (Medicamento medicamento : paciente.getMedicamentos()) {
+                System.out.println("- " + medicamento.getNome() + " (" + medicamento.getDosagem() + ")");
+            }
+        }
+    }
+    
 }
