@@ -2,6 +2,7 @@ package controller;
 
 import model.Medicamento;
 import model.Paciente;
+import utils.Mensagem;
 import view.MedicamentoView;
 
 import java.util.ArrayList;
@@ -22,7 +23,7 @@ public class MedicamentoController {
         Medicamento medicamento = medicamentoView.formPrescreverMedicamento();
         if (medicamento != null) {
             prescricoes.add(medicamento);
-            medicamentoView.exibirMensagem("Medicamento prescrito com sucesso.");
+            Mensagem.mensagemMedicamentoPrescrito(medicamento);
         }
     }
 
@@ -33,9 +34,9 @@ public class MedicamentoController {
         if (medicamento != null) {
             String novaDosagem = medicamentoView.solicitarNovaDosagem();
             medicamento.setDosagem(novaDosagem);
-            medicamentoView.exibirMensagem("Dosagem ajustada com sucesso.");
+            Mensagem.mensagemDosagemAjustada(medicamento);
         } else {
-            medicamentoView.exibirMensagem("Medicamento não encontrado.");
+            Mensagem.mensagemMedicamentoNaoEncontrado();
         }
     }
 
@@ -45,9 +46,9 @@ public class MedicamentoController {
 
         if (medicamento != null) {
             prescricoes.remove(medicamento);
-            medicamentoView.exibirMensagem("Prescrição cancelada com sucesso.");
+            Mensagem.mensagemMedicamentoCancelado(medicamento);
         } else {
-            medicamentoView.exibirMensagem("Medicamento não encontrado.");
+            Mensagem.mensagemMedicamentoNaoEncontrado();
         }
     }
 
@@ -90,10 +91,10 @@ public class MedicamentoController {
                     exibirMedicamentos();
                     break;
                 case 5:
-                    System.out.println("Saindo...");
+                    Mensagem.mensagemSair();
                     return;
                 default:
-                    System.out.println("Opção inválida. Tente novamente.");
+                    Mensagem.mensagemOpcaoInvalida();
             }
         }
     }

@@ -167,15 +167,4 @@ public class ConsultaView {
         System.out.println("2. Cancelar Consulta");
         return ler.nextInt();
     }
-
-    public void mensagemSucesso() {
-        System.out.println("\nConsulta agendada com sucesso.");
-    }
-
-    public void exibirMensagemErro(String mensagem) {
-        System.out.println("\nErro: " + mensagem);
-    }
-    public void mensagemConsultaCancelada() {
-        System.out.println("\nConsulta cancelada com sucesso.");
-    } 
 }

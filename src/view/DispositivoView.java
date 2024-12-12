@@ -1,6 +1,6 @@
 package view;
 
-import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 import controller.AlertaMenuController;
@@ -8,8 +8,10 @@ import model.DispositivoModel;
 
 public class DispositivoView {
     Scanner sc = new Scanner(System.in);
-    //Metodo View menu
-    public int exibirMenu(){
+    private int numerico = 1;
+
+    // Metodo View menu
+    public int exibirMenu() {
         System.out.println("--- Menu Dispostivo ---");
         System.out.println("1. Cadastrar Dispositivo");
         System.out.println("2. Visualizar Dispositivo");
@@ -19,26 +21,59 @@ public class DispositivoView {
         return sc.nextInt();
     }
 
-    //metodo cadastrar dispositivo
-    public DispositivoModel cadastrar(Scanner sc) {
+    public DispositivoModel cadastrar() {
         System.out.println("---Cadastro de Dispositivos---");
-        System.out.println("Tipo:");//criar um select
-        String tipo = sc.nextLine();
-        System.out.println("Marca:");
-        String marca = sc.nextLine();
-        System.out.println("Modelo:");
-        String modelo = sc.nextLine();
-        System.out.println("Status:");//aqui também pode ser um select
-        String status = sc.nextLine();
-        System.out.println("Valor apresentado em bpm:");
-        double valor = sc.nextDouble();
-        System.out.println("Adicionar uma opção ");
-        System.out.println();
-        System.out.println("-------------------------------");
+        String[] tipo = selecionarTipo();
+        String[] marcaModelo = selecionarMarcaModelo(tipo[0]);
+        String status = selecionarStatus();
+        double valor = 0.0;
 
-        //retorna
-        return new DispositivoModel(tipo, marca, modelo, status, valor);
+        if (status.equals("Ativo")) {
+            valor = validarValorPorTipo(tipo[0]);
+        }
+        System.out.println("-------------------------------");
+        exibirMensagem("Dispositivo cadastrado com sucesso!");
+        return new DispositivoModel(tipo[0], marcaModelo[0], marcaModelo[1], status, valor);
     }
+
+   private String[] selecionarMarcaModelo(String tipo) {
+    System.out.println("--- Seleção de Marca ---");
+    
+    Map<String, String[][]> dispositivosConfig = Map.of(
+        "Frequência cardíaca", new String[][] {
+            {"Apple", "Apple Watch"},
+            {"Garmin", "Garmin Vivoactive 4"},
+            {"Polar", "Polar Vantage V"}
+        },
+        "Pressão sanguínea", new String[][] {
+            {"Omron", "Omron HEM-7122"},
+            {"Beurer", "Beurer BM 300"},
+            {"Microlife", "Microlife BP 780"}
+        },
+        "Temperatura", new String[][] {
+            {"Iheath", "Iheath iHealth"},
+            {"Braun", "Braun ThermoScan"},
+            {"Exergen", "Exergen D50"}
+        }
+    );
+
+    String[][] opcoes = dispositivosConfig.get(tipo);
+    for (int i = 0; i < opcoes.length; i++) {
+        System.out.println((i + 1) + ". " + opcoes[i][0]);
+    }
+
+    int escolha = sc.nextInt();
+    sc.nextLine();
+
+    if (escolha >= 1 && escolha <= opcoes.length) {
+        return opcoes[escolha - 1];
+    }
+
+    exibirMensagem("Opção inválida.");
+    return selecionarMarcaModelo(tipo);
+}
+
+
     public String[] selecionarTipo() {
         System.out.println("\n--- Seleção de Tipo ---");
         System.out.println("1. Frequência cardíaca");
@@ -49,9 +84,12 @@ public class DispositivoView {
         sc.nextLine();
 
         switch (escolha) {
-            case 1: return new String[]{"Frequência cardíaca", "bpm"};
-            case 2: return new String[]{"Pressão sanguínea", "mmHg"};
-            case 3: return new String[]{"Temperatura", "°C"};
+            case 1:
+                return new String[] { "Frequência cardíaca", "bpm" };
+            case 2:
+                return new String[] { "Pressão sanguínea", "mmHg" };
+            case 3:
+                return new String[] { "Temperatura", "°C" };
             default:
                 exibirMensagem("Opção inválida.");
                 return selecionarTipo();
@@ -67,6 +105,40 @@ public class DispositivoView {
         sc.nextLine();
 
         return escolha == 1 ? "Ativo" : "Desativado";
+    }
+
+    private double validarValorPorTipo(String tipo) {
+        double valor;
+        while (true) {
+            try {
+                switch (tipo) {
+                    case "Frequência cardíaca":
+                        System.out.print("Digite o valor em bpm (40-200): ");
+                        valor = sc.nextDouble();
+                        if (valor >= 40 && valor <= 200)
+                            return valor;
+                        break;
+
+                    case "Pressão sanguínea":
+                        System.out.print("Digite o valor em mmHg (60-180): ");
+                        valor = sc.nextDouble();
+                        if (valor >= 60 && valor <= 180)
+                            return valor;
+                        break;
+
+                    case "Temperatura":
+                        System.out.print("Digite o valor em °C (35-42): ");
+                        valor = sc.nextDouble();
+                        if (valor >= 35 && valor <= 42)
+                            return valor;
+                        break;
+                }
+                System.out.println("Valor fora do intervalo permitido. Tente novamente.");
+            } catch (Exception e) {
+                System.out.println("Valor inválido. Digite um número.");
+                sc.nextLine();
+            }
+        }
     }
 
     public int selecionarCampoAtualizacao() {
@@ -99,32 +171,36 @@ public class DispositivoView {
         System.out.println(mensagem);
     }
 
-    public void exibirDispositivos(List<DispositivoModel> dispositivos) {
-        if (dispositivos.isEmpty()) {
+    public void exibirDispositivos(String tipo, String marca, String modelo, String status, double valor) {
+        if (tipo == null || marca == null || modelo == null || status == null || valor == 0) {
             System.out.println("Nenhum dispositivo cadastrado.");
         } else {
-            System.out.println("--- Lista de Dispositivos ---");
-            for (int i = 0; i < dispositivos.size(); i++) {
-                DispositivoModel dispositivo = dispositivos.get(i);
-                System.out.printf("Dispositivo %d:\n", i + 1);
-                System.out.printf("Tipo: %s\n", dispositivo.getTipo());
-                System.out.printf("Marca: %s\n", dispositivo.getMarca());
-                System.out.printf("Modelo: %s\n", dispositivo.getModelo());
-                System.out.printf("Status: %s\n", dispositivo.getStatus());
-                System.out.printf("Valor: %s\n", dispositivo.getValor());
+            System.out.printf("Dispositivo %d:\n", numerico++);
+            System.out.printf("Tipo: %s\n", tipo);
+            System.out.printf("Marca: %s\n", marca);
+            System.out.printf("Modelo: %s\n", modelo);
+            System.out.printf("Status: %s\n", status);
+            System.out.printf("Valor: %s\n", valor);
 
-                // Verificando os limites para cada dispositivo
-                AlertaMenuController.verificarLimites(dispositivo.getTipo(), dispositivo.getTipo().equals("Frequência cardiaca") ? "bpm" : (dispositivo.getTipo().equals("Pressão sanguínea") ? "mmHg" : "°C"), dispositivo.getValor());
+            // Verificando os limites para cada dispositivo
+            AlertaMenuController.verificarLimites(tipo,
+                    tipo.equals("Frequência cardiaca") ? "bpm"
+                            : (tipo.equals("Pressão sanguínea") ? "mmHg" : "°C"),
+                    valor);
 
-                System.out.println("-----------------------------");
-            }
+            System.out.println("-----------------------------");
         }
-}
+    }
 
-public int mensagemOpcoesAtualizacao() {
-    System.out.println("--- Atualização de Dispositivo ---");
-    System.out.println("1. Tipo\n2. Marca\n3. Modelo\n4. Status\n5. Valor");
-    System.out.print("Escolha o campo que deseja atualizar: ");
-    return sc.nextInt();
-}
+    public int mensagemOpcoesAtualizacao() {
+        System.out.println("--- Atualização de Dispositivo ---");
+        System.out.println("1. Tipo\n2. Marca\n3. Modelo\n4. Status\n5. Valor");
+        System.out.print("Escolha o campo que deseja atualizar: ");
+        return sc.nextInt();
+    }
+
+    public int selecionarParaRemover(int numero) {
+        System.out.print("Digite o número do dispositivo que deseja remover: ");
+        return numero = sc.nextInt();
+    }
 }

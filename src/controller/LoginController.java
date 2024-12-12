@@ -5,6 +5,7 @@ import model.Paciente;
 import model.Medico;
 import model.UsuarioModel;
 import model.UsuarioRepositorio;
+import utils.Mensagem;
 import view.LoginView;
 
 public class LoginController {
@@ -25,7 +26,7 @@ public class LoginController {
         UsuarioModel usuario = view.formLogin(ler);
         UsuarioModel usuarioAutenticado = autenticarUsuario(usuario.getEmail(), usuario.getSenha());
         this.usuarioLogado = usuarioAutenticado;
-        view.mensagemAposLogin(usuarioAutenticado);
+        Mensagem.mensagemAposLogin(usuarioAutenticado);
         
         if (usuarioAutenticado instanceof Paciente) {
             Paciente pacienteLogado = (Paciente) usuarioAutenticado;

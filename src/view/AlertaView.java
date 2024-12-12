@@ -3,6 +3,7 @@ import java.util.Scanner;
 
 import model.AlertaModel;
 import utils.DataHora;
+import utils.Mensagem;
 
 public class AlertaView {
     private Scanner sc = new Scanner(System.in);
@@ -24,7 +25,7 @@ public class AlertaView {
         } else if(escolha == 2){
             tipo = "Anormalidade";
         }else{
-            mensagemValorInvalido();
+            Mensagem.mensagemValorInvalido();
             return null;
         }
         System.out.print("Mensagem: ");
@@ -38,26 +39,10 @@ public class AlertaView {
         return new AlertaModel(tipo, mensagem, paciente, medico, data);
     }
 
-    public String mensagemSair() {
-        return "Saindo...";
-    }
-
-    public String mensagemValorInvalido(){
-        return "Índice inválido! Tente novamente.";
-    }
 
     public int mostrarFinalizarAlerta(){
         System.out.print("Informe o índice do alerta a ser finalizado: ");
         int index = sc.nextInt();
         return index;
-    }
-    public void mensagemAlertaFinalizado(){
-        System.out.println("Alerta finalizado com sucesso!");
-    }
-    public void mensagemAlertaSucesso(){
-        System.out.println("Alerta criado com sucesso!");
-    }
-    public void mensagemAlertaErro(){
-        System.out.println("Erro ao criar o alerta.");
     }
 }

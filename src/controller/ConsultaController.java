@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import model.UsuarioRepositorio;
+import utils.Mensagem;
 import model.Consulta;
 import model.Medico;
 import model.Paciente;
@@ -57,13 +58,13 @@ public class ConsultaController {
             }
             medico.getConsultas().add(consulta);
             paciente.getHistoricoMedico().add(consulta);
-            view.mensagemSucesso();
+            Mensagem.mensagemSucesso();
         }
     }
 
     public void cancelarConsulta(Consulta consulta) {
         this.consultas.remove(consulta);
-        view.mensagemConsultaCancelada();
+        Mensagem.mensagemConsultaCancelada();
     }
 
     public void confirmarEditarCancelarConsulta(Scanner ler, Consulta consulta) {

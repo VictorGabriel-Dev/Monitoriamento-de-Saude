@@ -2,6 +2,7 @@
 package controller;
 
 import model.*;
+import utils.Mensagem;
 import view.MedicoView;
 import view.MonitoramentoView;
 import java.util.*;
@@ -14,7 +15,7 @@ public class MonitoramentoController {
     private ConsultaController consultaController;
     private Scanner sc;
     private MedicoView medicoView;
-    private MedicoController  medicoController;
+    private MedicoController medicoController;
 
     public MonitoramentoController() {
         this.sc = new Scanner(System.in);
@@ -35,7 +36,7 @@ public class MonitoramentoController {
             case 2:
                 return;
             default:
-                System.out.println("Valor inválido!");
+                Mensagem.mensagemOpcaoInvalida();
         }
     }
 
@@ -63,7 +64,7 @@ public class MonitoramentoController {
                 case 4:
                     return;
                 default:
-                    view.exibirMensagem("Valor inválido! Tente novamente.");
+                    Mensagem.mensagemOpcaoInvalida();
             }
         } while (escolha != 0);
     }
@@ -71,7 +72,7 @@ public class MonitoramentoController {
     public void exibirDiagnostico() {
         List<Consulta> consultas = paciente.getHistoricoMedico();
         if (consultas == null || consultas.isEmpty()) {
-            view.exibirMensagem("Nenhum diagnostico registrado para esse paciente.");
+            Mensagem.mensagemDiagnosticoNaoEncontrado();
         } else {
             for (int i = 0; i < consultas.size(); i++) {
                 Consulta consulta = consultas.get(i);
@@ -100,7 +101,7 @@ public class MonitoramentoController {
                 return;
             default:
                 if (escolha < 1 || escolha > pacientes.size()) {
-                    System.out.println("Opção inválida! Tente novamente.");
+                    Mensagem.mensagemOpcaoInvalida();
                     return;
                 }
                 exibirDadosMonitoracao(pacientes.get(escolha - 1));
@@ -123,7 +124,7 @@ public class MonitoramentoController {
                 System.out.println("Voltar");
                 break;
             default:
-                System.out.println("Opção inválida! Tente novamente.");
+                Mensagem.mensagemOpcaoInvalida();
         }
     }
 

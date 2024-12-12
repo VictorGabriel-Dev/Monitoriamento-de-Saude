@@ -5,7 +5,7 @@ public class DispositivoModel {
     private String marca;
     private String modelo;
     private String status;
-    private double valor;//ele precisa ser double para ser capaz de receber tanto int quanto decimal
+    private double valor;
 
     public DispositivoModel(String tipo, String marca, String modelo, String status, double valor){
         this.tipo = tipo;

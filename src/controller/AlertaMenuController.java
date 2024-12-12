@@ -3,17 +3,17 @@ package controller;
 import java.util.ArrayList;
 import java.util.List;
 import model.AlertaModel;
+import utils.Mensagem;
 import view.AlertaView;
 
 public class AlertaMenuController {
     private List<AlertaModel> alertas;
     private AlertaView view;
 
-    public AlertaMenuController(){
+    public AlertaMenuController() {
         this.view = new AlertaView();
         this.alertas = new ArrayList<>();
     }
-
 
     public void alertaMenu() {
         int escolha;
@@ -21,7 +21,7 @@ public class AlertaMenuController {
             escolha = view.mostrarMenu();
             switch (escolha) {
                 case 0:
-                    view.mensagemSair();
+                    Mensagem.mensagemSair();
                     break;
                 case 1:
                     adicionarAlerta();
@@ -32,11 +32,11 @@ public class AlertaMenuController {
                 case 3:
                     boolean sucesso = finalizarAlerta();
                     if (!sucesso) {
-                        view.mensagemValorInvalido();
+                        Mensagem.mensagemValorInvalido();
                     }
                     break;
                 default:
-                    view.mensagemValorInvalido();
+                    Mensagem.mensagemValorInvalido();
             }
         } while (escolha != 0);
     }
@@ -44,10 +44,10 @@ public class AlertaMenuController {
     public void adicionarAlerta() {
         AlertaModel novoAlerta = view.formCriarAlerta();
         if (novoAlerta != null) {
-        alertas.add(novoAlerta);
-        view.mensagemAlertaSucesso();
-        }else{
-            view.mensagemAlertaErro();
+            alertas.add(novoAlerta);
+            Mensagem.mensagemAlertaSucesso();
+        } else {
+            Mensagem.mensagemAlertaErro();
         }
     }
 
@@ -55,10 +55,10 @@ public class AlertaMenuController {
         int index = view.mostrarFinalizarAlerta();
         if (index >= 0 && index < alertas.size()) {
             alertas.remove(index);
-            view.mensagemAlertaFinalizado();
+            Mensagem.mensagemAlertaFinalizado();
             return true;
         } else {
-            view.mensagemValorInvalido();
+            Mensagem.mensagemValorInvalido();
             return false;
         }
     }
@@ -69,11 +69,12 @@ public class AlertaMenuController {
         } else {
             for (int i = 0; i < alertas.size(); ++i) {
                 AlertaModel alerta = alertas.get(i);
-                System.out.printf("[%d] - Tipo: %s | Mensagem: %s | Paciente: %s | Médico: %s | Data: %s%n", i, alerta.getTipo(), alerta.getMensagem(), alerta.getPaciente(), alerta.getMedico(), alerta.getData());
+                System.out.printf("[%d] - Tipo: %s | Mensagem: %s | Paciente: %s | Médico: %s | Data: %s%n", i,
+                        alerta.getTipo(), alerta.getMensagem(), alerta.getPaciente(), alerta.getMedico(),
+                        alerta.getData());
             }
         }
     }
-
 
     // Método para gerar mensagens de alerta com base na unidade de medida
     public static void gerarAlerta(String tipoDispositivo, String unidadeMedida, String mensagem) {

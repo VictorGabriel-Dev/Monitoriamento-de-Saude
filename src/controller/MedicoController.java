@@ -2,6 +2,7 @@ package controller;
 
 import model.*;
 import utils.MedicoInputType;
+import utils.Mensagem;
 import view.MedicamentoView;
 import view.MedicoView;
 import java.util.ArrayList;
@@ -145,7 +146,7 @@ public class MedicoController extends BaseController<Medico> {
                 exibirOpcoesConsulta(consultaSelecionada);
             }
         } else {
-            medicoView.naoHaConsultas();
+            Mensagem.mensagemNaoHaConsultas();
         }
     }
 
@@ -209,11 +210,11 @@ public class MedicoController extends BaseController<Medico> {
         }
 
         if (pacientes.isEmpty()) {
-            medicoView.nenhumPaciente();
+            Mensagem.mensagemNenhumPaciente();
             return null;
         }
 
-        medicoView.lista();
+        Mensagem.mensagemLista();
         for (int i = 0; i < pacientes.size(); i++) {
             Paciente paciente = pacientes.get(i);
             System.out.println((i + 1) + ". " + paciente.getNome() + " (CPF: " + paciente.getCpf() + ")");

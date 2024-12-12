@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import utils.MedicoInputType;
+import utils.Mensagem;
 import model.Consulta;
 import model.Medicamento;
 import model.Medico;
@@ -63,18 +64,6 @@ public class MedicoView extends BaseView<Medico> {
         return ler.nextInt();
     }
 
-    public void lista() {
-        System.out.println("\n--- Lista de Pacientes ---");
-    }
-
-    public void naoHaConsultas() {
-        System.out.println("Não há consultas agendadas.");
-    }
-
-    public void nenhumPaciente() {
-        System.out.println("Nenhum paciente cadastrado.");
-    }
-
     public void exibirConsultasAgendadas(String nomeMedico, List<Consulta> consultas) {
         System.out.println("\nConsultas agendadas para o médico " + nomeMedico + ":");
         if (consultas != null && !consultas.isEmpty()) {
@@ -84,7 +73,7 @@ public class MedicoView extends BaseView<Medico> {
                         + consulta.getDataConsulta());
             }
         } else {
-            naoHaConsultas();
+            Mensagem.mensagemNaoHaConsultas();
         }
     }
 
