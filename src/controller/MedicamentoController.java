@@ -1,6 +1,7 @@
 package controller;
 
 import model.Medicamento;
+import model.Paciente;
 import view.MedicamentoView;
 
 import java.util.ArrayList;
@@ -10,6 +11,7 @@ public class MedicamentoController {
 
     private MedicamentoView medicamentoView;
     private List<Medicamento> prescricoes;
+    private Paciente paciente;
 
     public MedicamentoController() {
         this.medicamentoView = new MedicamentoView();
@@ -49,10 +51,19 @@ public class MedicamentoController {
         }
     }
 
-    public void consultarMedicamento() {
-        String nomeMedicamento = medicamentoView.solicitarNomeMedicamento();
-        Medicamento medicamento = buscarMedicamento(nomeMedicamento);
-        medicamentoView.exibirMedicamento(medicamento);
+    public void exibirMedicamentos() {
+        List<Medicamento> medicamentos = paciente.getMedicamentos();
+        for (Medicamento medicamento : medicamentos) {
+            if (medicamento != null) {
+                medicamentoView.dadosMedicamento(
+                        medicamento.getNome(),
+                        medicamento.getDosagem(),
+                        medicamento.getFrequencia(),
+                        medicamento.getDescricao(),
+                        medicamento.getMedico().getNome(),
+                        medicamento.getDataPrescricao());
+            }
+        }
     }
 
     public Medicamento buscarMedicamento(String nome) {
@@ -76,7 +87,7 @@ public class MedicamentoController {
                     cancelarPrescricao();
                     break;
                 case 4:
-                    consultarMedicamento();
+                    exibirMedicamentos();
                     break;
                 case 5:
                     System.out.println("Saindo...");

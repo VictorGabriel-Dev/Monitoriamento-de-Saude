@@ -8,10 +8,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 import model.Consulta;
+import model.Medicamento;
 import model.Medico;
 import model.Paciente;
 import java.util.stream.IntStream;
-
 
 public class ConsultaView {
 
@@ -23,37 +23,39 @@ public class ConsultaView {
         return ler.nextInt();
     }
 
-    public void exibirHistoricoMedico(List<Consulta> historicoMedico) {
-        if (historicoMedico.isEmpty()) {
+    public void exibirHistoricoMedico(LocalDate dataConsulta, String horaConsulta, String paciente, String medico,
+            List<String> diagnostico, List<Medicamento> prescricao) {
+        if (dataConsulta == null || horaConsulta == null || paciente == null || medico == null || diagnostico == null
+                || prescricao == null) {
             System.out.println("\nNão há histórico médico registrado.");
+            return;
         } else {
             System.out.println("\n********** Histórico Médico **********");
-            historicoMedico.forEach(consulta -> {
-                System.out.printf("\nData da Consulta: %s\n", consulta.getDataConsulta());
-                System.out.printf("Hora da Consulta: %s\n", consulta.getHoraConsulta());
-                System.out.printf("Paciente: %s\n", consulta.getPaciente().getNome());
-                System.out.printf("Médico: %s\n", consulta.getMedico().getNome());
-                System.out.printf("Diagnóstico: %s\n", consulta.getDiagnostico());
-                System.out.printf("Prescrição: %s\n", consulta.getPrescricao());
-                System.out.println("***************************************");
-            });
+            System.out.printf("\nData da Consulta: %s\n", dataConsulta);
+            System.out.printf("Hora da Consulta: %s\n", horaConsulta);
+            System.out.printf("Paciente: %s\n", paciente);
+            System.out.printf("Médico: %s\n", medico);
+            System.out.printf("Diagnóstico: %s\n", diagnostico);
+            System.out.printf("Prescrição: %s\n", prescricao);
+            System.out.println("***************************************");
         }
     }
 
     public Consulta formAddConsulta(Scanner ler, Paciente paciente, List<Medico> medicosDisponiveis,
             List<Consulta> consultasAgendadas) {
-        ler.nextLine(); // Limpar buffer
+        ler.nextLine();
         System.out.println("\n********** Agendar Consulta **********");
 
         Date dataConsulta = obterDataConsulta(ler);
         String horaConsulta = obterHoraConsulta(ler);
         Medico medicoEscolhido = escolherMedico(ler, medicosDisponiveis);
-        
+
         if (verificarConflitoHorario(consultasAgendadas, dataConsulta, horaConsulta, medicoEscolhido)) {
             return null;
         }
 
-        return new Consulta(dataConsulta.toInstant().atZone(ZoneId.systemDefault()).toLocalDate(), horaConsulta, paciente, medicoEscolhido, null, null);
+        return new Consulta(dataConsulta.toInstant().atZone(ZoneId.systemDefault()).toLocalDate(), horaConsulta,
+                paciente, medicoEscolhido, null, null);
     }
 
     private Date obterDataConsulta(Scanner ler) {
@@ -106,7 +108,8 @@ public class ConsultaView {
     private Medico escolherMedico(Scanner ler, List<Medico> medicosDisponiveis) {
         System.out.println("\nEscolha um médico para a consulta:");
         IntStream.range(0, medicosDisponiveis.size())
-                .forEach(i -> System.out.printf("%d. %s - Especialidade: %s\n", i + 1, medicosDisponiveis.get(i).getNome(), medicosDisponiveis.get(i).getEspecialidade()));
+                .forEach(i -> System.out.printf("%d. %s - Especialidade: %s\n", i + 1,
+                        medicosDisponiveis.get(i).getNome(), medicosDisponiveis.get(i).getEspecialidade()));
 
         Medico medicoEscolhido = null;
         while (medicoEscolhido == null) {
@@ -122,7 +125,8 @@ public class ConsultaView {
         return medicoEscolhido;
     }
 
-    private boolean verificarConflitoHorario(List<Consulta> consultasAgendadas, Date dataConsulta, String horaConsulta, Medico medicoEscolhido) {
+    private boolean verificarConflitoHorario(List<Consulta> consultasAgendadas, Date dataConsulta, String horaConsulta,
+            Medico medicoEscolhido) {
         LocalDate dataConsultaLocalDate = dataConsulta.toInstant()
                 .atZone(ZoneId.systemDefault())
                 .toLocalDate();
@@ -137,19 +141,16 @@ public class ConsultaView {
         return false;
     }
 
-    public void exibirAgendamentos(List<Consulta> consultasAgendadas) {
-        if (consultasAgendadas.isEmpty()) {
+    public void exibirAgendamentos(LocalDate dataConsulta, String horaConsulta, String paciente, String medico) {
+        if (dataConsulta == null || horaConsulta == null || paciente == null || medico == null) {
             System.out.println("\nNão há agendamentos de consultas.");
-        } else {
-            System.out.println("\n********** Agendamentos de Consultas **********");
-            consultasAgendadas.forEach(consulta -> {
-                System.out.printf("\nData da Consulta: %s\n", consulta.getDataConsulta());
-                System.out.printf("Hora da Consulta: %s\n", consulta.getHoraConsulta());
-                System.out.printf("Paciente: %s\n", consulta.getPaciente().getNome());
-                System.out.printf("Médico: %s\n", consulta.getMedico().getNome());
-                System.out.println("***************************************");
-            });
-        }
+            return;
+        }   System.out.println("***************************************");
+            System.out.printf("\nData da Consulta: %s\n", dataConsulta);
+            System.out.printf("Hora da Consulta: %s\n", horaConsulta);
+            System.out.printf("Paciente: %s\n", paciente);
+            System.out.printf("Médico: %s\n", medico);
+            System.out.println("***************************************");
     }
 
     public int opcoesAgendarConsultarAgendamento(Scanner ler) {
@@ -167,7 +168,6 @@ public class ConsultaView {
         return ler.nextInt();
     }
 
-
     public void mensagemSucesso() {
         System.out.println("\nConsulta agendada com sucesso.");
     }
@@ -175,4 +175,7 @@ public class ConsultaView {
     public void exibirMensagemErro(String mensagem) {
         System.out.println("\nErro: " + mensagem);
     }
+    public void mensagemConsultaCancelada() {
+        System.out.println("\nConsulta cancelada com sucesso.");
+    } 
 }

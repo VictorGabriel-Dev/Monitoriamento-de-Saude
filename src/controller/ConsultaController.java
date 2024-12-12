@@ -18,8 +18,8 @@ public class ConsultaController {
     private UsuarioRepositorio repositorio;
 
     public ConsultaController(Paciente paciente) {
-        this.view = new ConsultaView();
         this.paciente = paciente;
+        this.view = new ConsultaView();
         this.consultas = new ArrayList<>();
         this.repositorio = UsuarioRepositorio.getInstance();
         this.medicosDisponiveis = new ArrayList<>();
@@ -48,24 +48,22 @@ public class ConsultaController {
     public void confirmarConsulta(Consulta consulta) {
         // Adiciona a consulta ao histórico do paciente
         this.consultas.add(consulta);
-        view.mensagemSucesso();
+        
 
-        // Aqui, você pode adicionar a consulta ao histórico do médico
         Medico medico = consulta.getMedico();
         if (medico != null) {
-            // Se o médico não tiver um histórico de consultas, inicialize a lista
             if (medico.getConsultas() == null) {
                 medico.setConsultas(new ArrayList<>());
             }
             medico.getConsultas().add(consulta);
-            System.out.println("Consulta agendada com sucesso para o médico " + medico.getNome());
+            paciente.getHistoricoMedico().add(consulta);
+            view.mensagemSucesso();
         }
     }
 
-
     public void cancelarConsulta(Consulta consulta) {
         this.consultas.remove(consulta);
-        System.out.println("Consulta cancelada com sucesso.");
+        view.mensagemConsultaCancelada();
     }
 
     public void confirmarEditarCancelarConsulta(Scanner ler, Consulta consulta) {
@@ -86,9 +84,20 @@ public class ConsultaController {
             }
         } while (opcao != 3);
     }
+
     public void consultarAgendamentos() {
-        view.exibirAgendamentos(consultas);
+       List<Consulta> consultas = paciente.getHistoricoMedico();
+        for (Consulta consulta : consultas) {
+            if (consultas != null && !consultas.isEmpty() && consulta.getPaciente() != null && consulta.getMedico() != null) {
+                view.exibirAgendamentos(
+                        consulta.getDataConsulta(),
+                        consulta.getHoraConsulta(),
+                        consulta.getPaciente().getNome(),
+                        consulta.getMedico().getNome());
+            }
+        };
     }
+
     public void consultaOpcoes(Scanner ler) {
         int opcao;
         do {
@@ -109,8 +118,19 @@ public class ConsultaController {
 
     }
 
-    public void consultarHistorico() {
-        view.exibirHistoricoMedico(paciente.getHistoricoMedico());
+    public void consultarHistorico(Paciente paciente) {
+        List<Consulta> consultas = paciente.getHistoricoMedico();
+        for (Consulta consulta : consultas) {
+            if (consultas != null && !consultas.isEmpty() && consulta.getPaciente() != null && consulta.getMedico() != null && consulta.getDiagnostico() != null && consulta.getPrescricao() != null) {
+                view.exibirHistoricoMedico(
+                        consulta.getDataConsulta(),
+                        consulta.getHoraConsulta(),
+                        consulta.getPaciente().getNome(),
+                        consulta.getMedico().getNome(),
+                        consulta.getDiagnostico(),
+                        consulta.getPrescricao());
+            }
+        }
     }
 
     public void menuHistoricoMedico(Scanner ler) {
@@ -119,7 +139,7 @@ public class ConsultaController {
             opcao = view.menu(ler);
             switch (opcao) {
                 case 1:
-                    consultarHistorico();
+                    consultarHistorico(paciente);
                     break;
                 case 2:
                     return;

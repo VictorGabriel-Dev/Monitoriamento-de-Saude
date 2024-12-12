@@ -26,8 +26,17 @@ public class LoginController {
         UsuarioModel usuarioAutenticado = autenticarUsuario(usuario.getEmail(), usuario.getSenha());
         this.usuarioLogado = usuarioAutenticado;
         view.mensagemAposLogin(usuarioAutenticado);
-        exibirMenu();
+        
+        if (usuarioAutenticado instanceof Paciente) {
+            Paciente pacienteLogado = (Paciente) usuarioAutenticado;
+            PacienteController pacienteController = new PacienteController(pacienteLogado);
+            pacienteController.menu();
+        } else if (usuarioAutenticado instanceof Medico) {
+            MedicoController medicoController = new MedicoController((Medico) usuarioAutenticado);
+            medicoController.menu();
+        }
     }
+    
 
     private UsuarioModel autenticarUsuario(String email, String senha) {
         for (UsuarioModel usuario : repositorio.getUsuarios()) {

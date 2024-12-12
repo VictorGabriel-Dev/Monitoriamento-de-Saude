@@ -58,7 +58,7 @@ public class Medico extends UsuarioModel {
 
     @Override
     public String toString() {
-        return "\n********** Dados do Paciente **********\n" +
+        return "\n********** Dados do Medico **********\n" +
                 "Nome: " + nome + "\n" +
                 "Especialidade: " + especialidade + "\n" +
                 "CRM: " + crm + "\n" +

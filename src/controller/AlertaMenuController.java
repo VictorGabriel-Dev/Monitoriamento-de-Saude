@@ -2,18 +2,16 @@ package controller;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 import model.AlertaModel;
-import utils.DataHora;
 import view.AlertaView;
 
 public class AlertaMenuController {
-    private Scanner sc = new Scanner(System.in); // Scanner único
-    private List<AlertaModel> alertas = new ArrayList<>();
+    private List<AlertaModel> alertas;
     private AlertaView view;
 
-    public AlertaMenuController(AlertaView view) {
-        this.view = view;
+    public AlertaMenuController(){
+        this.view = new AlertaView();
+        this.alertas = new ArrayList<>();
     }
 
 
@@ -26,8 +24,7 @@ public class AlertaMenuController {
                     view.mensagemSair();
                     break;
                 case 1:
-                    model.AlertaModel novoAlerta = criarAlerta();
-                    adicionarAlerta(novoAlerta);
+                    adicionarAlerta();
                     break;
                 case 2:
                     listarAlertas();
@@ -44,32 +41,21 @@ public class AlertaMenuController {
         } while (escolha != 0);
     }
 
-    public void adicionarAlerta(AlertaModel alerta) {
-        alertas.add(alerta);
-        System.out.println("Alerta adicionado com sucesso!");
-    }
-
-    public AlertaModel criarAlerta() {
-        System.out.print("--- Tipo ---\n1 - Emergência \n2 - Anormalidade\n");
-        int escolha = sc.nextInt();
-        sc.nextLine();
-        String tipo = seletTipo(escolha);
-        System.out.print("Mensagem: ");
-        String mensagem = sc.nextLine();
-        System.out.print("Paciente: ");
-        String paciente = sc.nextLine();
-        System.out.print("Médico: ");
-        String medico = sc.nextLine();
-        String data = DataHora.getDataHoraAtual();
-
-        return new AlertaModel(tipo, mensagem, paciente, medico, data);
+    public void adicionarAlerta() {
+        AlertaModel novoAlerta = view.formCriarAlerta();
+        if (novoAlerta != null) {
+        alertas.add(novoAlerta);
+        view.mensagemAlertaSucesso();
+        }else{
+            view.mensagemAlertaErro();
+        }
     }
 
     public boolean finalizarAlerta() {
         int index = view.mostrarFinalizarAlerta();
         if (index >= 0 && index < alertas.size()) {
             alertas.remove(index);
-            System.out.println("Alerta finalizado com sucesso!");
+            view.mensagemAlertaFinalizado();
             return true;
         } else {
             view.mensagemValorInvalido();
@@ -88,22 +74,7 @@ public class AlertaMenuController {
         }
     }
 
-    // Método selectTipo que retorna o tipo conforme a escolha
-    public String seletTipo(int escolha) {
-        String tipo = "";
-        switch (escolha) {
-            case 1:
-                tipo = "emergência";
-                break;
-            case 2:
-                tipo = "anormalidade";
-                break;
-            default:
-                view.mensagemValorInvalido();
-                break;
-        }
-        return tipo;
-    }
+
     // Método para gerar mensagens de alerta com base na unidade de medida
     public static void gerarAlerta(String tipoDispositivo, String unidadeMedida, String mensagem) {
         System.out.println("Alerta no dispositivo: " + tipoDispositivo + " (" + unidadeMedida + ") - " + mensagem);
