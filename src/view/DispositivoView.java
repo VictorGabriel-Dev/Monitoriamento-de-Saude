@@ -2,8 +2,6 @@ package view;
 
 import java.util.Map;
 import java.util.Scanner;
-
-import controller.AlertaMenuController;
 import model.DispositivoModel;
 
 public class DispositivoView {
@@ -13,14 +11,17 @@ public class DispositivoView {
     // Metodo View menu
     public int exibirMenu() {
         System.out.println("--- Menu Dispostivo ---");
-        System.out.println("1. Cadastrar Dispositivo");
-        System.out.println("2. Visualizar Dispositivo");
-        System.out.println("3. Remover Dispositivo");
-        System.out.println("4. Atualizar Dispositivo");
-        System.out.println("5. Sair");
+        System.out.println("1. Configurar");
+        System.out.println("2. Voltar");
         return sc.nextInt();
     }
-
+    public int opcoesConfigurar(){
+        System.out.println("1. Cadastrar Dispositivo");
+        System.out.println("2. Remover Dispositivo");
+        System.out.println("3. Atualizar Dispositivo");
+        System.out.println("4. Voltar");
+        return sc.nextInt();
+    }
     public DispositivoModel cadastrar() {
         System.out.println("---Cadastro de Dispositivos---");
         String[] tipo = selecionarTipo();
@@ -175,22 +176,25 @@ public class DispositivoView {
         if (tipo == null || marca == null || modelo == null || status == null || valor == 0) {
             System.out.println("Nenhum dispositivo cadastrado.");
         } else {
-            System.out.printf("Dispositivo %d:\n", numerico++);
-            System.out.printf("Tipo: %s\n", tipo);
-            System.out.printf("Marca: %s\n", marca);
-            System.out.printf("Modelo: %s\n", modelo);
-            System.out.printf("Status: %s\n", status);
-            System.out.printf("Valor: %s\n", valor);
-
-            // Verificando os limites para cada dispositivo
-            AlertaMenuController.verificarLimites(tipo,
+            System.out.println("╔════════════════════════════════════╗");
+            System.out.println("║         DISPOSITIVO " + numerico++ + "              ║");
+            System.out.println("╠════════════════════════════════════╣");
+            System.out.printf("║  Tipo: %-27s║\n", tipo);
+            System.out.printf("║  Marca: %-26s║\n", marca);
+            System.out.printf("║  Modelo: %-25s║\n", modelo);
+            System.out.printf("║  Status: %-25s║\n", status);
+            System.out.printf("║  Valor: %-26.1f║\n", valor);
+            System.out.println("╚════════════════════════════════════╝");
+    
+            AlertaView.verificarLimites(tipo,
                     tipo.equals("Frequência cardiaca") ? "bpm"
                             : (tipo.equals("Pressão sanguínea") ? "mmHg" : "°C"),
                     valor);
-
-            System.out.println("-----------------------------");
+    
+            System.out.println();
         }
     }
+    
 
     public int mensagemOpcoesAtualizacao() {
         System.out.println("--- Atualização de Dispositivo ---");

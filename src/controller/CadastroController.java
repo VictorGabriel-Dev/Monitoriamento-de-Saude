@@ -15,38 +15,40 @@ public class CadastroController{
         this.repositorio = UsuarioRepositorio.getInstance();
     }
 
-    public void cadastrarPaciente() {
+    public boolean cadastrarPaciente() {
         Paciente paciente = view.showCadastroPaciente();
         if(paciente == null){
-            return;
+            return false;
         }
         if(repositorio.verificaSeEmailExiste(paciente.getEmail())){
             Mensagem.mensagemEmailExistente();
-            return;
+            return false;
         }
         if (repositorio.verificarSeCpfExiste(paciente.getCpf())) {
             Mensagem.mensagemCpfExistente();
-            return;
+            return false;
         }
         Mensagem.mensagemSucesso();
         repositorio.adicionarUsuario(paciente);
+        return true;
     }
 
-    public void cadastrarMedico() {
+    public boolean cadastrarMedico() {
         Medico medico = view.showCadastroMedico();
         if(medico == null){
-            return;
+            return false;
         }
         if(repositorio.verificaSeEmailExiste(medico.getEmail())){
             Mensagem.mensagemEmailExistente();
-            return;
+            return false;
         }
         if(repositorio.verificarSeCrmExiste(medico.getCrm())){
             Mensagem.mensagemCrmExistente();
-            return;
+            return false;
         }
         Mensagem.mensagemSucesso();
         repositorio.adicionarUsuario(medico);
+        return true;
         
     }
 }

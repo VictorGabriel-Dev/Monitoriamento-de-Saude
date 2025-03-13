@@ -1,6 +1,9 @@
 package controller;
 
+import java.util.InputMismatchException;
 import java.util.Scanner;
+
+import utils.Mensagem;
 import view.AppView;
 
 public class AppController {
@@ -19,23 +22,29 @@ public class AppController {
     public void run() {
         int opcao;
         do {
-            opcao = view.showMenu(ler);
-            switch (opcao) {
-                case 1:
-                    loginController.entrar();
-                    break;
-                case 2:
-                    cadastroController.cadastrarPaciente();
-                    break;
-                case 3:
-                    cadastroController.cadastrarMedico();
-                    break;
-                case 4:
-                    System.out.println("Saindo...");
-                    break;
-                default:
-                    System.out.println("Opção inválida!");
-                    break;
+            try {
+                opcao = view.showMenu(ler);
+                switch (opcao) {
+                    case 1:
+                        loginController.entrar();
+                        break;
+                    case 2:
+                        cadastroController.cadastrarPaciente();
+                        break;
+                    case 3:
+                        cadastroController.cadastrarMedico();
+                        break;
+                    case 4:
+                        Mensagem.mensagemSair();
+                        break;
+                    default:
+                        Mensagem.mensagemOpcaoInvalida();
+                        break;
+                }
+            } catch (InputMismatchException e) {
+                Mensagem.mensagemOpcaoInvalida();
+                ler.nextLine();
+                opcao = 0;
             }
         } while (opcao != 4);
     }

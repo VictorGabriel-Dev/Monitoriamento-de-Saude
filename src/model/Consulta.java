@@ -1,19 +1,23 @@
 package model;
+
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.ArrayList;
 
 import utils.IdGenerator;
+
 public class Consulta {
-    private String idConsulta; 
+    private String idConsulta;
     private LocalDate dataConsulta;
-    private String horaConsulta;
+    private LocalTime horaConsulta;
     private Paciente paciente;
     private Medico medico;
-    private List<String> diagnostico;
+    private List<Diagnostico> diagnostico;
     private List<Medicamento> prescricao;
 
-    public Consulta(LocalDate dataConsulta, String horaConsulta, Paciente paciente, Medico medico, List<String> diagnostico, List<Medicamento> prescricao) {
+    public Consulta(LocalDate dataConsulta, LocalTime horaConsulta, Paciente paciente, Medico medico,
+            List<String> diagnostico, List<Medicamento> prescricao) {
         this.idConsulta = new IdGenerator().gerarIdConsulta();
         this.dataConsulta = dataConsulta;
         this.horaConsulta = horaConsulta;
@@ -26,47 +30,51 @@ public class Consulta {
     public String getIdConsulta() {
         return idConsulta;
     }
+
     public LocalDate getDataConsulta() {
         return dataConsulta;
     }
-    public String getHoraConsulta() {
+
+    public LocalTime getHoraConsulta() {
         return horaConsulta;
     }
+
     public Medico getMedico() {
         return medico;
     }
+
     public Paciente getPaciente() {
         return paciente;
     }
-    public List<String> getDiagnostico() {
+
+    public List<Diagnostico> getDiagnostico() {
         return diagnostico;
     }
+
     public List<Medicamento> getPrescricao() {
         return prescricao;
     }
+
     public void setDataConsulta(LocalDate dataConsulta) {
         this.dataConsulta = dataConsulta;
     }
-    public void setHoraConsulta(String horaConsulta) {
+
+    public void setHoraConsulta(LocalTime horaConsulta) {
         this.horaConsulta = horaConsulta;
     }
+
     public void setMedico(Medico medico) {
         this.medico = medico;
     }
-    public void setDiagnostico(List<String> diagnostico) {
+
+    public void setDiagnostico(List<Diagnostico> diagnostico) {
         this.diagnostico = diagnostico;
     }
+
     public void setPrescricao(List<Medicamento> prescricao) {
         this.prescricao = prescricao;
     }
-    public void adicionarDiagnostico(String diagnostico) {
-        this.diagnostico.add(diagnostico);
-    }
-    public void alterarDiagnostico(int indice, String novoDiagnostico) {
-        if (indice >= 0 && indice < diagnostico.size()) {
-            diagnostico.set(indice, novoDiagnostico);
-        }
-    }
+
     public void adicionarMedicamento(Medicamento medicamento) {
         this.prescricao.add(medicamento);
     }
