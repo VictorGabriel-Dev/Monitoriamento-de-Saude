@@ -6,6 +6,7 @@ import utils.Mensagem;
 import view.MedicamentoView;
 import view.MedicoView;
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -16,7 +17,7 @@ public class MedicoController extends BaseController<Medico> {
     private DispositivoController dispositivoController;
     private UsuarioRepositorio repositorio;
     private MedicamentoView medicamentoView;
-    private AlertaMenuController alertController;
+    private AlertaController alertController;
     private MonitoramentoController monitoramentoController;
     private MedicamentoController medicamentoController;
 
@@ -27,8 +28,8 @@ public class MedicoController extends BaseController<Medico> {
         this.sc = new Scanner(System.in);
         this.repositorio = UsuarioRepositorio.getInstance();
         this.medicamentoView = new MedicamentoView();
-        this.alertController = new AlertaMenuController();
-        this.monitoramentoController = new MonitoramentoController();
+        this.alertController = new AlertaController(medico);
+        this.monitoramentoController = new MonitoramentoController(medico);
 
     }
 
@@ -40,50 +41,57 @@ public class MedicoController extends BaseController<Medico> {
     public void alterarDados(Medico medico) {
         int opcao;
         do {
-            opcao = medicoView.selecionarQualAlterar();
-            String novoDado = null;
+            try {
+                opcao = medicoView.selecionarQualAlterar();
+                String novoDado = null;
 
-            switch (opcao) {
-                case 1:
-                    medicoView.solicitarInput(MedicoInputType.NOME);
-                    novoDado = sc.nextLine();
-                    if (confirmarAlteracao()) {
-                        medico.setNome(novoDado);
-                    }
-                    break;
-                case 2:
-                    medicoView.solicitarInput(MedicoInputType.ESPECIALIDADE);
-                    novoDado = sc.nextLine();
-                    if (confirmarAlteracao()) {
-                        medico.setEspecialidade(novoDado);
-                    }
-                    break;
-                case 3:
-                    medicoView.solicitarInput(MedicoInputType.CRM);
-                    novoDado = sc.nextLine();
-                    if (confirmarAlteracao()) {
-                        medico.setCrm(novoDado);
-                    }
-                    break;
-                case 4:
-                    medicoView.solicitarInput(MedicoInputType.TELEFONE);
-                    novoDado = sc.nextLine();
-                    if (confirmarAlteracao()) {
-                        medico.setTelefone(novoDado);
-                    }
-                    break;
-                case 5:
-                    medicoView.solicitarInput(MedicoInputType.EMAIL);
-                    novoDado = sc.nextLine();
-                    if (confirmarAlteracao()) {
-                        medico.setEmail(novoDado);
-                    }
-                    break;
-                case 6:
-                    return;
-                default:
-                    System.out.println("Opção inválida.");
-                    break;
+                switch (opcao) {
+                    case 1:
+                        medicoView.solicitarInput(MedicoInputType.NOME);
+                        novoDado = sc.nextLine();
+                        if (confirmarAlteracao()) {
+                            medico.setNome(novoDado);
+                        }
+                        break;
+                    case 2:
+                        medicoView.solicitarInput(MedicoInputType.ESPECIALIDADE);
+                        novoDado = sc.nextLine();
+                        if (confirmarAlteracao()) {
+                            medico.setEspecialidade(novoDado);
+                        }
+                        break;
+                    case 3:
+                        medicoView.solicitarInput(MedicoInputType.CRM);
+                        novoDado = sc.nextLine();
+                        if (confirmarAlteracao()) {
+                            medico.setCrm(novoDado);
+                        }
+                        break;
+                    case 4:
+                        medicoView.solicitarInput(MedicoInputType.TELEFONE);
+                        novoDado = sc.nextLine();
+                        if (confirmarAlteracao()) {
+                            medico.setTelefone(novoDado);
+                        }
+                        break;
+                    case 5:
+                        medicoView.solicitarInput(MedicoInputType.EMAIL);
+                        novoDado = sc.nextLine();
+                        if (confirmarAlteracao()) {
+                            medico.setEmail(novoDado);
+                        }
+                        break;
+                    case 6:
+                        return;
+                    default:
+                        Mensagem.mensagemOpcaoInvalida();
+                        break;
+                }
+            } catch (InputMismatchException e) {
+                Mensagem.mensagemOpcaoInvalida();
+                ler.nextLine();
+                opcao = 0;
+                continue;
             }
         } while (opcao != 6);
     }
@@ -126,7 +134,7 @@ public class MedicoController extends BaseController<Medico> {
                     alertController.alertaMenu();
                     break;
                 case 6:
-                    // monitoramentoController.menuMonitoramento();
+                    monitoramentoController.menuMonitoramento();
                     break;
                 case 7:
                     return;
@@ -137,24 +145,38 @@ public class MedicoController extends BaseController<Medico> {
     }
 
     public void consultarAgendamentos() {
-        if (medico.getConsultas() != null && !medico.getConsultas().isEmpty()) {
-            medicoView.exibirConsultasAgendadas(medico.getNome(), medico.getConsultas());
-            int opcao = medicoView.selecionarConsulta();
-            if (opcao != 0) {
-                Consulta consultaSelecionada = medico.getConsultas().get(opcao - 1);
-                medicoView.exibirDetalhesConsulta(consultaSelecionada);
-                exibirOpcoesConsulta(consultaSelecionada);
-            }
-        } else {
+        List<Consulta> consultas = medico.getConsultas();
+
+        if (consultas == null || consultas.isEmpty()) {
             Mensagem.mensagemNaoHaConsultas();
+            return;
+        }
+
+        for (int i = 0; i < consultas.size(); i++) {
+            Consulta consulta = consultas.get(i);
+            medicoView.exibirConsultasAgendadas(
+                    i + 1,
+                    medico.getNome(),
+                    consulta.getPaciente().getNome(),
+                    consulta.getDataConsulta(),
+                    consulta.getHoraConsulta());
+        }
+
+        int opcao = medicoView.selecionarConsulta();
+        if (opcao > 0 && opcao <= consultas.size()) {
+            Consulta consultaSelecionada = consultas.get(opcao - 1);
+            medicoView.exibirDetalhesConsulta(consultaSelecionada.getPaciente().getNome(),
+                    consultaSelecionada.getDataConsulta(), consultaSelecionada.getDiagnostico(),
+                    consultaSelecionada.getPrescricao());
+            exibirOpcoesConsulta(consultaSelecionada);
         }
     }
 
-    public void exibirOpcoesConsulta(Consulta consulta) {
+    private void exibirOpcoesConsulta(Consulta consulta) {
         int opcao;
 
         do {
-            opcao = medicoView.exibirOpcoesConsulta();
+            opcao = medicoView.mostrarOpcoesConsulta();
             switch (opcao) {
                 case 1:
                     fazerDiagnostico(consulta);
@@ -166,36 +188,55 @@ public class MedicoController extends BaseController<Medico> {
                     registrarPrescricao(consulta);
                     break;
                 case 4:
-                    return;
+                    break;
                 default:
-                    System.out.println("Opção inválida.");
+                    Mensagem.mensagemOpcaoInvalida();
+                    break;
             }
         } while (opcao != 4);
     }
 
-    public void fazerDiagnostico(Consulta consulta) {
-        System.out.println("Digite o diagnóstico para o paciente " + consulta.getPaciente().getNome() + ": ");
-        String diagnostico = sc.nextLine();
-        consulta.adicionarDiagnostico(diagnostico);
-        System.out.println("Diagnóstico registrado!");
+    private void fazerDiagnostico(Consulta consulta) {
+        Diagnostico diagnostico = medicoView.formDiagnostico(consulta.getPaciente().getNome());
+        consulta.getDiagnostico().add(diagnostico);
+        Mensagem.mensagemDiagnosticoCriado(diagnostico);
     }
 
-    public void alterarDiagnostico(Consulta consulta) {
-        System.out.println("Digite o novo diagnóstico para o paciente " + consulta.getPaciente().getNome() + ": ");
-        String diagnostico = sc.nextLine();
-        consulta.alterarDiagnostico(0, diagnostico);
-        System.out.println("Diagnóstico alterado!");
+    private void alterarDiagnostico(Consulta consulta) {
+        List<Diagnostico> diagnosticos = consulta.getDiagnostico();
+
+        if (diagnosticos.isEmpty()) {
+            Mensagem.mensagemDiagnosticoNaoEncontrado();
+            return;
+        }
+
+        // Display existing diagnostics
+        for (int i = 0; i < diagnosticos.size(); i++) {
+            System.out.printf("[%d] - %s%n", i + 1, diagnosticos.get(i).getDiagnostico());
+        }
+
+        System.out.print("Selecione o diagnóstico a ser alterado (1-" + diagnosticos.size() + "): ");
+        int escolha = sc.nextInt();
+        sc.nextLine(); // Clear buffer
+
+        if (escolha > 0 && escolha <= diagnosticos.size()) {
+            Diagnostico novoDiagnostico = medicoView.formAlterarDiagnostico(consulta.getPaciente().getNome());
+            diagnosticos.set(escolha - 1, novoDiagnostico);
+            Mensagem.mensagemDiagnosticoAtualizado(novoDiagnostico);
+        } else {
+            Mensagem.mensagemOpcaoInvalida();
+        }
     }
 
-    public void registrarPrescricao(Consulta consulta) {
+    private void registrarPrescricao(Consulta consulta) {
         Medicamento medicamento = medicamentoView.formPrescreverMedicamento();
 
         if (medicamento != null) {
             consulta.adicionarMedicamento(medicamento);
-            consulta.getPaciente().adicionarAoPlano(medicamento); // Adiciona o medicamento ao plano do paciente
-            System.out.println("Prescrição registrada com sucesso!");
+            consulta.getPaciente().adicionarAoPlano(medicamento);
+            Mensagem.mensagemMedicamentoPrescrito(medicamento.getNome());
         } else {
-            System.out.println("Prescrição não registrada.");
+            Mensagem.mensagemMedicamentoNaoResgistrado();
         }
     }
 

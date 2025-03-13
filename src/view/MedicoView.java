@@ -1,11 +1,12 @@
 package view;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import utils.MedicoInputType;
-import utils.Mensagem;
-import model.Consulta;
+import model.Diagnostico;
 import model.Medicamento;
 import model.Medico;
 
@@ -22,22 +23,23 @@ public class MedicoView extends BaseView<Medico> {
         System.out.println("7. Sair");
         return ler.nextInt();
     }
+
     public String solicitarInput(MedicoInputType tipo) {
-    switch (tipo) {
-        case NOME:
-            return solicitarEntrada("Digite o novo nome: ");
-        case ESPECIALIDADE:
-            return solicitarEntrada("Digite a nova especialidade: ");
-        case CRM:
-            return solicitarEntrada("Digite o novo CRM: ");
-        case TELEFONE:
-            return solicitarEntrada("Digite o novo telefone: ");
-        case EMAIL:
-            return solicitarEntrada("Digite o novo e-mail: ");
-        default:
-            return null;
+        switch (tipo) {
+            case NOME:
+                return solicitarEntrada("Digite o novo nome: ");
+            case ESPECIALIDADE:
+                return solicitarEntrada("Digite a nova especialidade: ");
+            case CRM:
+                return solicitarEntrada("Digite o novo CRM: ");
+            case TELEFONE:
+                return solicitarEntrada("Digite o novo telefone: ");
+            case EMAIL:
+                return solicitarEntrada("Digite o novo e-mail: ");
+            default:
+                return null;
+        }
     }
-}
 
     @Override
     public int selecionarQualAlterar() {
@@ -49,7 +51,7 @@ public class MedicoView extends BaseView<Medico> {
         System.out.println("5 - E-mail");
         System.out.println("6 - Voltar");
         System.out.print("Escolha o dado a ser alterado: ");
-        return ler.nextInt();
+        return validateIntInput("Escolha o dado a ser alterado: ");
     }
 
     public int opcoesDepoisDePlanoPaciente() {
@@ -64,17 +66,12 @@ public class MedicoView extends BaseView<Medico> {
         return ler.nextInt();
     }
 
-    public void exibirConsultasAgendadas(String nomeMedico, List<Consulta> consultas) {
+    public void exibirConsultasAgendadas(int num, String nomeMedico,
+            String pacientesConsultasMarcadas, LocalDate data, LocalTime hora) {
         System.out.println("\nConsultas agendadas para o médico " + nomeMedico + ":");
-        if (consultas != null && !consultas.isEmpty()) {
-            for (int i = 0; i < consultas.size(); i++) {
-                Consulta consulta = consultas.get(i);
-                System.out.println((i + 1) + ". Paciente: " + consulta.getPaciente().getNome() + ", Data: "
-                        + consulta.getDataConsulta());
-            }
-        } else {
-            Mensagem.mensagemNaoHaConsultas();
-        }
+
+        System.out.println(num + ". Paciente: " + pacientesConsultasMarcadas + ", Data: "
+                + data + ", Hora: " + hora);
     }
 
     public int selecionarConsulta() {
@@ -93,30 +90,29 @@ public class MedicoView extends BaseView<Medico> {
         return opcao;
     }
 
-    public void exibirDetalhesConsulta(Consulta consulta) {
+    public void exibirDetalhesConsulta(String nomePaciente, LocalDate data, List<Diagnostico> diagnostico,
+            List<Medicamento> prescricao) {
         System.out.println("\nDetalhes da consulta:");
-        System.out.println("Paciente: " + consulta.getPaciente().getNome());
-        System.out.println("Data da consulta: " + consulta.getDataConsulta());
-        System.out.println("Diagnóstico: " + String.join(", ", consulta.getDiagnostico()));
-        System.out.println("Prescrição: " + consulta.getPrescricao());
+        System.out.println("Paciente: " + nomePaciente);
+        System.out.println("Data da consulta: " + data);
+        System.out.println("Diagnóstico: " + (diagnostico.isEmpty() ? "Não registrado"
+                : diagnostico.stream().map(Diagnostico::toString).collect(Collectors.joining(", "))));
+        System.out.println("Prescrições: "
+                + (prescricao.isEmpty() ? "Não registrada" : prescricao.size() + " medicamentos prescritos"));
 
-        // Exibir os medicamentos prescritos
-        if (consulta.getPrescricao() != null && !consulta.getPrescricao().isEmpty()) {
-            System.out.println("\nMedicamentos Prescritos:");
-            for (Medicamento medicamento : consulta.getPrescricao()) {
-                System.out.println("Nome: " + medicamento.getNome());
-                System.out.println("Dosagem: " + medicamento.getDosagem());
-                System.out.println("Frequência: " + medicamento.getFrequencia());
-                System.out.println("Descrição: " + medicamento.getDescricao());
-                System.out.println("Data de Prescrição: " + medicamento.getDataPrescricao());
-                System.out.println("-----------------------------");
-            }
-        } else {
-            System.out.println("Nenhum medicamento prescrito.");
-        }
     }
 
-    public int exibirOpcoesConsulta() {
+    public void exibirMedicamentosPrescritos(String nome, String dosagem, String frequencia, String descricao,
+            String dataPrescricao) {
+        System.out.println("Nome: " + nome);
+        System.out.println("Dosagem: " + dosagem);
+        System.out.println("Frequência: " + frequencia);
+        System.out.println("Descrição: " + descricao);
+        System.out.println("Data de Prescrição: " + dataPrescricao);
+        System.out.println("-----------------------------");
+    }
+
+    public int mostrarOpcoesConsulta() {
         System.out.println("\nO que deseja fazer?");
         System.out.println("1. Adicionar diagnóstico");
         System.out.println("2. Alterar diagnóstico");
@@ -143,5 +139,19 @@ public class MedicoView extends BaseView<Medico> {
         System.out.println("3- Alertas");
         System.out.println("4- Voltar");
         return ler.nextInt();
+    }
+
+    public Diagnostico formDiagnostico(String nomePaciente) {
+        ler.nextLine();
+        System.out.println("Digite o diagnóstico para o paciente " + nomePaciente + ": ");
+        String diagnostico = ler.nextLine();
+        return new Diagnostico(diagnostico);
+    }
+
+    public Diagnostico formAlterarDiagnostico(String nomePaciente) {
+        ler.nextLine();
+        System.out.println("Digite o novo diagnóstico para o paciente " + nomePaciente + ": ");
+        String novoDiagnotico = ler.nextLine();
+        return new Diagnostico(novoDiagnotico);
     }
 }

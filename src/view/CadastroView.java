@@ -51,7 +51,7 @@ public class CadastroView {
             if (!Validacao.validarCpf(cpf)) {
                 System.out.println("CPF inválido! Digite um CPF válido.");
             }
-        } while (Validacao.validarCpf(cpf));
+        } while (!Validacao.validarCpf(cpf));
     
         while (dataNascimento == null) {
             System.out.print("Data de Nascimento (dd/MM/yyyy): ");

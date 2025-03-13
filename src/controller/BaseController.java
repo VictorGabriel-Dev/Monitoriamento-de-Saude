@@ -1,26 +1,38 @@
 package controller;
+
 import java.util.Scanner;
+
+import utils.Mensagem;
+
 public abstract class BaseController<T> {
     protected Scanner ler = new Scanner(System.in);
+
     public abstract void alterarDados(T entity);
+
     protected String solicitarEntrada(String mensagem) {
         System.out.print(mensagem);
-        return ler.nextLine(); 
+        return ler.nextLine();
     }
+
     protected void exibirMensagem(String mensagem) {
         System.out.println(mensagem);
     }
+
     public boolean confirmarAlteracao() {
+        System.out.println(Mensagem.mensagemParaConfirmar());
         while (true) {
-            System.out.println("Deseja confirmar? (1 - Sim, 2 - Não)");
             String input = ler.nextLine().trim();
-            
-            if (input.equals("1") || input.equalsIgnoreCase("s") || input.equalsIgnoreCase("sim")) {
+            if (input.equals(Mensagem.mensagemDigitaUm()) ||
+                    input.equalsIgnoreCase(Mensagem.mensagemDigitaS()) ||
+                    input.equalsIgnoreCase(Mensagem.mensagemDigitaSim())) {
                 return true;
-            } else if (input.equals("2") || input.equalsIgnoreCase("n") || input.equalsIgnoreCase("nao") || input.equalsIgnoreCase("não")) {
+            } else if (input.equals(Mensagem.mensagemDigitaDois()) ||
+                    input.equalsIgnoreCase(Mensagem.mensagemDigitaN()) ||
+                    input.equalsIgnoreCase(Mensagem.mensagemDigitaNaoSemAU()) ||
+                    input.equalsIgnoreCase(Mensagem.mensagemDigitaNao())) {
                 return false;
             }
-            System.out.println("Entrada inválida. Por favor digite 1 para Sim ou 2 para Não");
+            System.out.println(Mensagem.mensagemInvalidaDigUmOuDois());
         }
     }
 }
