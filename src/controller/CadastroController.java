@@ -3,6 +3,7 @@ package controller;
 import model.Medico;
 import model.Paciente;
 import model.UsuarioRepositorio;
+import utils.Mensagem;
 import view.CadastroView;
 
 public class CadastroController{
@@ -20,14 +21,14 @@ public class CadastroController{
             return;
         }
         if(repositorio.verificaSeEmailExiste(paciente.getEmail())){
-            view.mensagemEmailExistente();
+            Mensagem.mensagemEmailExistente();
             return;
         }
         if (repositorio.verificarSeCpfExiste(paciente.getCpf())) {
-            view.mensagemCpfExistente();
+            Mensagem.mensagemCpfExistente();
             return;
         }
-        view.mensagemSucesso();
+        Mensagem.mensagemSucesso();
         repositorio.adicionarUsuario(paciente);
     }
 
@@ -37,14 +38,14 @@ public class CadastroController{
             return;
         }
         if(repositorio.verificaSeEmailExiste(medico.getEmail())){
-            view.mensagemEmailExistente();
+            Mensagem.mensagemEmailExistente();
             return;
         }
         if(repositorio.verificarSeCrmExiste(medico.getCrm())){
-            view.mensagemCrmExistente();
+            Mensagem.mensagemCrmExistente();
             return;
         }
-        view.mensagemSucesso();
+        Mensagem.mensagemSucesso();
         repositorio.adicionarUsuario(medico);
         
     }

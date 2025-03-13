@@ -58,17 +58,17 @@ public class MedicamentoView {
         return scanner.nextLine();
     }
 
-    public void exibirMedicamento(Medicamento medicamento) {
-        if (medicamento == null) {
-            System.out.println("Medicamento não encontrado.");
+    public void dadosMedicamento(String nome, String dosagem, String frequencia, String descricao, String medico, String dataPrescricao) {
+        if (nome != null && dosagem != null && frequencia != null && descricao != null && medico != null && dataPrescricao != null) {
+            System.out.println("\n--- Dados do Medicamento ---");
+            System.out.println("Nome: " + nome);
+            System.out.println("Dosagem: " + dosagem);
+            System.out.println("Frequência: " + frequencia);
+            System.out.println("Descrição: " + descricao);
+            System.out.println("Médico responsavel: " + medico);
+            System.out.println("Data da prescrição: " + dataPrescricao);
         } else {
-            System.out.println("\n--- Detalhes do Medicamento ---");
-            System.out.println("Nome: " + medicamento.getNome());
-            System.out.println("Dosagem: " + medicamento.getDosagem());
-            System.out.println("Frequência: " + medicamento.getFrequencia());
-            System.out.println("Descrição: " + medicamento.getDescricao());
-            System.out.println("Prescrito por: " + (medicamento.getMedico() != null ? medicamento.getMedico().getNome() : "Desconhecido"));
-            System.out.println("Data da Prescrição: " + medicamento.getDataPrescricao());
+            System.out.println("Medicamento não encontrado.");
         }
     }
 

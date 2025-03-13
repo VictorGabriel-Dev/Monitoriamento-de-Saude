@@ -3,6 +3,7 @@ package view;
 import java.util.Scanner;
 import model.Medico;
 import model.Paciente;
+import utils.Validacao;
 
 import java.time.LocalDate;
 
@@ -23,34 +24,34 @@ public class CadastroView {
         do {
             System.out.print("Email: ");
             email = ler.nextLine();
-            if (!validarEmail(email)) {
+            if (!Validacao.validarEmail(email)) {
                 System.out.println("Email inválido! Certifique-se de que o email contém '@' e termina com '.com'.");
             }
-        } while (!validarEmail(email));
+        } while (!Validacao.validarEmail(email));
     
         do {
             System.out.print("Telefone: ");
             telefone = ler.nextLine();
-            if (!validarTelefone(telefone)) {
+            if (!Validacao.validarTelefone(telefone)) {
                 System.out.println("Telefone inválido! Digite um número válido (exemplo: (11) 91234-5678).");
             }
-        } while (!validarTelefone(telefone));
+        } while (!Validacao.validarTelefone(telefone));
     
         do {
             System.out.print("Senha: ");
             senha = ler.nextLine();
-            if (!validarSenha(senha)) {
+            if (!Validacao.validarSenha(senha)) {
                 System.out.println("Senha inválida! A senha deve ter no mínimo 6 caracteres.");
             }
-        } while (!validarSenha(senha));
+        } while (!Validacao.validarSenha(senha));
     
         do {
             System.out.print("CPF: ");
             cpf = ler.nextLine();
-            if (!validarCpf(cpf)) {
+            if (!Validacao.validarCpf(cpf)) {
                 System.out.println("CPF inválido! Digite um CPF válido.");
             }
-        } while (!validarCpf(cpf));
+        } while (Validacao.validarCpf(cpf));
     
         while (dataNascimento == null) {
             System.out.print("Data de Nascimento (dd/MM/yyyy): ");
@@ -100,25 +101,25 @@ public class CadastroView {
                         do {
                             System.out.print("Novo Email: ");
                             email = ler.nextLine();
-                        } while (!validarEmail(email));
+                        } while (!Validacao.validarEmail(email));
                         break;
                     case 3:
                         do {
                             System.out.print("Novo Telefone: ");
                             telefone = ler.nextLine();
-                        } while (!validarTelefone(telefone));
+                        } while (!Validacao.validarTelefone(telefone));
                         break;
                     case 4:
                         do {
                             System.out.print("Nova Senha: ");
                             senha = ler.nextLine();
-                        } while (!validarSenha(senha));
+                        } while (!Validacao.validarSenha(senha));
                         break;
                     case 5:
                         do {
                             System.out.print("Novo CPF: ");
                             cpf = ler.nextLine();
-                        } while (!validarCpf(cpf));
+                        } while (!Validacao.validarCpf(cpf));
                         break;
                     case 6:
                         while (dataNascimento == null) {
@@ -164,15 +165,15 @@ public class CadastroView {
         do {
             System.out.print("Email: ");
             email = ler.nextLine();
-            if (!validarEmail(email)) {
+            if (!Validacao.validarEmail(email)) {
                 System.out.println("Email inválido! Certifique-se de que o email contém '@' e termina com '.com'.");
             }
-        } while (!validarEmail(email));
+        } while (!Validacao.validarEmail(email));
     
         do {
             System.out.print("Senha: ");
             senha = ler.nextLine();
-        } while (!validarSenha(senha));
+        } while (!Validacao.validarSenha(senha));
     
         do {
             System.out.print("Especialidade: ");
@@ -182,15 +183,15 @@ public class CadastroView {
         do {
             System.out.print("CRM: ");
             crm = ler.nextLine();
-        } while (!validarCrm(crm));
+        } while (!Validacao.validarCrm(crm));
     
         do {
             System.out.print("Telefone: ");
             telefone = ler.nextLine();
-            if (!validarTelefone(telefone)) {
+            if (!Validacao.validarTelefone(telefone)) {
                 System.out.println("Telefone inválido! Digite um número válido (exemplo: (11) 91234-5678).");
             }
-        } while (!validarTelefone(telefone));
+        } while (!Validacao.validarTelefone(telefone));
     
         while (true) {
             System.out.println("\n=== Confirmação de Cadastro ===");
@@ -222,13 +223,13 @@ public class CadastroView {
                         do {
                             System.out.print("Novo Email: ");
                             email = ler.nextLine();
-                        } while (!validarEmail(email));
+                        } while (!Validacao.validarEmail(email));
                         break;
                     case 3:
                         do {
                             System.out.print("Nova Senha: ");
                             senha = ler.nextLine();
-                        } while (!validarSenha(senha));
+                        } while (!Validacao.validarSenha(senha));
                         break;
                     case 4:
                         do {
@@ -240,13 +241,13 @@ public class CadastroView {
                         do {
                             System.out.print("Novo CRM: ");
                             crm = ler.nextLine();
-                        } while (!validarCrm(crm));
+                        } while (!Validacao.validarCrm(crm));
                         break;
                     case 6:
                         do {
                             System.out.print("Novo Telefone: ");
                             telefone = ler.nextLine();
-                        } while (!validarTelefone(telefone));
+                        } while (!Validacao.validarTelefone(telefone));
                         break;
                     default:
                         System.out.println("Opção inválida.");
@@ -259,42 +260,4 @@ public class CadastroView {
         return new Medico(nome, email, senha, especialidade, crm, telefone);
     }
     
-
-    public void mensagemSucesso() {
-        System.out.println("Cadastro realizado com sucesso!");
-    }
-
-    public void mensagemCpfExistente() {
-        System.out.println("CPF já cadastrado!");
-    }
-
-    public void mensagemEmailExistente() {
-        System.out.println("Email já cadastrado!");
-    }
-
-    public void mensagemCrmExistente() {
-        System.out.println("CRM já cadastrado!");
-    }
-
-    private boolean validarEmail(String email) {
-        String regex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
-        return email.matches(regex);
-    }
-
-    private boolean validarTelefone(String telefone) {
-        String regex = "\\(\\d{2}\\) \\d{5}-\\d{4}";
-        return telefone.matches(regex);
-    }
-
-    private boolean validarSenha(String senha) {
-        return senha.length() >= 6;
-    }
-
-    private boolean validarCpf(String cpf) {
-        return cpf.matches("\\d{11}");
-    }
-
-    private boolean validarCrm(String crm) {
-        return crm.matches("\\d{6}");
-    }
 }

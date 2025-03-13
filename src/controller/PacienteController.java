@@ -3,6 +3,7 @@ package controller;
 
 import java.util.Scanner;
 import model.Paciente;
+import utils.PacienteInputType;
 import view.PacienteView;
 import java.time.LocalDate;
 
@@ -28,52 +29,59 @@ public class PacienteController extends BaseController<Paciente> {
         int opcao;
         do {
             opcao = pacienteView.selecionarQualAlterar();
-            String dadoAnterior = null;
-            boolean confirmacao = false;
+            String novoDado = null;
+
             switch (opcao) {
                 case 1:
-                    dadoAnterior = paciente.getNome();
-                    paciente.setNome(solicitarEntrada("Digite o novo nome: "));
+                    pacienteView.solicitarInput(PacienteInputType.NOME);
+                    novoDado = ler.nextLine();
+                    if (confirmarAlteracao()) {
+                        paciente.setNome(novoDado);
+                    }
                     break;
                 case 2:
-                    dadoAnterior = paciente.getCpf();
-                    paciente.setCpf(solicitarEntrada("Digite o novo CPF: "));
+                    pacienteView.solicitarInput(PacienteInputType.CPF);
+                    novoDado = ler.nextLine();
+                    if (confirmarAlteracao()) {
+                        paciente.setCpf(novoDado);
+                    }
                     break;
                 case 3:
-                    dadoAnterior = paciente.getDataNascimento().toString();
-                    paciente.setDataNascimento(LocalDate.parse(solicitarEntrada( "Digite a nova data de nascimento (AAAA-MM-DD): ")));
+                    novoDado = pacienteView.solicitarInput(PacienteInputType.DATA_NASCIMENTO);
+                    if (novoDado != null && confirmarAlteracao()) {
+                        LocalDate novaData = pacienteView.parseDataNascimento(novoDado);
+                        paciente.setDataNascimento(novaData);
+                    }
                     break;
                 case 4:
-                    dadoAnterior = paciente.getEndereco();
-                    paciente.setEndereco(solicitarEntrada("Digite o novo endereço: "));
+                    pacienteView.solicitarInput(PacienteInputType.ENDERECO);
+                    novoDado = ler.nextLine();
+                    if (confirmarAlteracao()) {
+                        paciente.setEndereco(novoDado);
+                    }
+                    break;
                 case 5:
-                    dadoAnterior = paciente.getTelefone();
-                    paciente.setTelefone(solicitarEntrada("Digite o novo telefone: "));
+                    pacienteView.solicitarInput(PacienteInputType.TELEFONE);
+                    novoDado = ler.nextLine();
+                    if (confirmarAlteracao()) {
+                        paciente.setTelefone(novoDado);
+                    }
                     break;
                 case 6:
-                    dadoAnterior = paciente.getEmail();
-                    paciente.setEmail(solicitarEntrada("Digite o novo e-mail: "));
+                    pacienteView.solicitarInput(PacienteInputType.EMAIL);
+                    novoDado = ler.nextLine();
+                    if (confirmarAlteracao()) {
+                        paciente.setEmail(novoDado);
+                    }
                     break;
                 case 7:
-                    return; // Sai do menu
-                    default:
+                    return;
+                default:
                     System.out.println("Opção inválida.");
-                    continue;
+                    break;
             }
-        confirmacao = confirmarAlteracao();
-        if (!confirmacao) {
-            if(opcao == 1) paciente.setNome(dadoAnterior);
-            if(opcao == 2) paciente.setCpf(dadoAnterior);
-            if(opcao == 3) paciente.setDataNascimento(LocalDate.parse(dadoAnterior));
-            if(opcao == 4) paciente.setEndereco(dadoAnterior);
-            if(opcao == 5) paciente.setTelefone(dadoAnterior);
-            if(opcao == 6) paciente.setEmail(dadoAnterior);
-            exibirMensagem("Alteração cancelada.");
-            }else{
-                exibirMensagem("Alteração realizada com sucesso!");
-            }
-        }while (opcao != 7);
-    } 
+        } while (opcao != 7);
+    }
 
     public void alterarEVoltar() {
         int opcao;
@@ -114,4 +122,3 @@ public class PacienteController extends BaseController<Paciente> {
         } while (opcao != 4);
     }
 }
-

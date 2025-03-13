@@ -1,7 +1,8 @@
 package controller;
 
 import model.*;
-import view.AlertaView;
+import utils.MedicoInputType;
+import utils.Mensagem;
 import view.MedicamentoView;
 import view.MedicoView;
 import java.util.ArrayList;
@@ -12,19 +13,23 @@ public class MedicoController extends BaseController<Medico> {
     private Scanner sc;
     private Medico medico;
     private MedicoView medicoView;
-    private ArrayList<Paciente> pacientes = new ArrayList<>();
     private DispositivoController dispositivoController;
     private UsuarioRepositorio repositorio;
     private MedicamentoView medicamentoView;
+    private AlertaMenuController alertController;
+    private MonitoramentoController monitoramentoController;
+    private MedicamentoController medicamentoController;
 
     public MedicoController(Medico medico) {
         this.medico = medico;
         this.medicoView = new MedicoView();
         this.dispositivoController = new DispositivoController();
-        this.pacientes = new ArrayList<>();
         this.sc = new Scanner(System.in);
         this.repositorio = UsuarioRepositorio.getInstance();
         this.medicamentoView = new MedicamentoView();
+        this.alertController = new AlertaMenuController();
+        this.monitoramentoController = new MonitoramentoController();
+
     }
 
     public void dadosMedico() {
@@ -36,54 +41,49 @@ public class MedicoController extends BaseController<Medico> {
         int opcao;
         do {
             opcao = medicoView.selecionarQualAlterar();
-            String dadoAnterior = null;
-            boolean confirmacao = false;
+            String novoDado = null;
 
             switch (opcao) {
                 case 1:
-                    dadoAnterior = medico.getNome();
-                    medico.setNome(solicitarEntrada("Digite o novo nome: "));
+                    medicoView.solicitarInput(MedicoInputType.NOME);
+                    novoDado = sc.nextLine();
+                    if (confirmarAlteracao()) {
+                        medico.setNome(novoDado);
+                    }
                     break;
                 case 2:
-                    dadoAnterior = medico.getEspecialidade();
-                    medico.setEspecialidade(solicitarEntrada("Digite a nova especialidade: "));
+                    medicoView.solicitarInput(MedicoInputType.ESPECIALIDADE);
+                    novoDado = sc.nextLine();
+                    if (confirmarAlteracao()) {
+                        medico.setEspecialidade(novoDado);
+                    }
                     break;
                 case 3:
-                    dadoAnterior = medico.getCrm();
-                    medico.setCrm(solicitarEntrada("Digite o novo CRM: "));
+                    medicoView.solicitarInput(MedicoInputType.CRM);
+                    novoDado = sc.nextLine();
+                    if (confirmarAlteracao()) {
+                        medico.setCrm(novoDado);
+                    }
                     break;
                 case 4:
-                    dadoAnterior = medico.getTelefone();
-                    medico.setTelefone(solicitarEntrada("Digite o novo telefone: "));
+                    medicoView.solicitarInput(MedicoInputType.TELEFONE);
+                    novoDado = sc.nextLine();
+                    if (confirmarAlteracao()) {
+                        medico.setTelefone(novoDado);
+                    }
                     break;
                 case 5:
-                    dadoAnterior = medico.getEmail();
-                    medico.setEmail(solicitarEntrada("Digite o novo e-mail: "));
+                    medicoView.solicitarInput(MedicoInputType.EMAIL);
+                    novoDado = sc.nextLine();
+                    if (confirmarAlteracao()) {
+                        medico.setEmail(novoDado);
+                    }
                     break;
                 case 6:
-                    return; // Sai do menu
+                    return;
                 default:
                     System.out.println("Opção inválida.");
-                    continue;
-            }
-
-            // Confirmação da alteração
-            confirmacao = confirmarAlteracao();
-            if (!confirmacao) {
-                // Reverte a alteração caso o usuário não confirme
-                if (opcao == 1)
-                    medico.setNome(dadoAnterior);
-                if (opcao == 2)
-                    medico.setEspecialidade(dadoAnterior);
-                if (opcao == 3)
-                    medico.setCrm(dadoAnterior);
-                if (opcao == 4)
-                    medico.setTelefone(dadoAnterior);
-                if (opcao == 5)
-                    medico.setEmail(dadoAnterior);
-                exibirMensagem("Alteração cancelada.");
-            } else {
-                exibirMensagem("Alteração confirmada com sucesso!");
+                    break;
             }
         } while (opcao != 6);
     }
@@ -114,7 +114,7 @@ public class MedicoController extends BaseController<Medico> {
                     alterarEVoltar();
                     break;
                 case 2:
-                    selecionarPaciente();// plano do paciente
+                    selecionarPacienteExibirPlano();
                     break;
                 case 3:
                     consultarAgendamentos();
@@ -123,13 +123,10 @@ public class MedicoController extends BaseController<Medico> {
                     dispositivoController.menu();
                     break;
                 case 5:
-                    AlertaView view = new AlertaView();
-                    AlertaMenuController controller = new AlertaMenuController(view);
-                    controller.alertaMenu();
+                    alertController.alertaMenu();
                     break;
                 case 6:
-                    MonitoramentoController monitoramentoController = new MonitoramentoController(pacientes);
-                    monitoramentoController.menuMonitoramento();
+                    // monitoramentoController.menuMonitoramento();
                     break;
                 case 7:
                     return;
@@ -149,7 +146,7 @@ public class MedicoController extends BaseController<Medico> {
                 exibirOpcoesConsulta(consultaSelecionada);
             }
         } else {
-            medicoView.naoHaConsultas();
+            Mensagem.mensagemNaoHaConsultas();
         }
     }
 
@@ -192,7 +189,7 @@ public class MedicoController extends BaseController<Medico> {
 
     public void registrarPrescricao(Consulta consulta) {
         Medicamento medicamento = medicamentoView.formPrescreverMedicamento();
-        
+
         if (medicamento != null) {
             consulta.adicionarMedicamento(medicamento);
             consulta.getPaciente().adicionarAoPlano(medicamento); // Adiciona o medicamento ao plano do paciente
@@ -201,9 +198,8 @@ public class MedicoController extends BaseController<Medico> {
             System.out.println("Prescrição não registrada.");
         }
     }
-    
 
-    public Paciente selecionarPaciente() {
+    public Paciente selecionarPacienteExibirPlano() {
         List<UsuarioModel> usuarios = repositorio.getUsuarios();
         List<Paciente> pacientes = new ArrayList<>();
 
@@ -214,11 +210,11 @@ public class MedicoController extends BaseController<Medico> {
         }
 
         if (pacientes.isEmpty()) {
-            medicoView.nenhumPaciente();
+            Mensagem.mensagemNenhumPaciente();
             return null;
         }
 
-        medicoView.lista();
+        Mensagem.mensagemLista();
         for (int i = 0; i < pacientes.size(); i++) {
             Paciente paciente = pacientes.get(i);
             System.out.println((i + 1) + ". " + paciente.getNome() + " (CPF: " + paciente.getCpf() + ")");
@@ -237,18 +233,25 @@ public class MedicoController extends BaseController<Medico> {
             System.out.println("Opção inválida! Tente novamente.");
             return null;
         }
-
-        return pacientes.get(escolha - 1);
+        Paciente pacienteSelecionado = pacientes.get(escolha - 1);
+        medicoView.perfilDoPaciente(
+                pacienteSelecionado.getNome(),
+                pacienteSelecionado.getCpf(),
+                pacienteSelecionado.getDataNascimento(),
+                pacienteSelecionado.getTelefone(),
+                pacienteSelecionado.getEndereco(),
+                pacienteSelecionado.getEmail());
+        monitoramentoController.Analise(pacienteSelecionado);
+        return pacienteSelecionado;
     }
+
     public void exibirPlanoTratamento(Paciente paciente) {
         System.out.println("Plano de Tratamento do Paciente " + paciente.getNome() + ":");
         if (paciente.getMedicamentos().isEmpty()) {
             System.out.println("Nenhum medicamento registrado.");
         } else {
-            for (Medicamento medicamento : paciente.getMedicamentos()) {
-                System.out.println("- " + medicamento.getNome() + " (" + medicamento.getDosagem() + ")");
-            }
+            medicamentoController.exibirMedicamentos();
         }
+
     }
-    
 }

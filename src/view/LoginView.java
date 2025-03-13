@@ -11,14 +11,4 @@ public class LoginView {
         String senha = ler.nextLine();
         return new UsuarioModel(email, senha);
     }
-    public void mensagemAposLogin(UsuarioModel usuario){
-        if (usuario != null) {
-            System.out.println("Login bem-sucedido!");
-        } else {
-            System.out.println("Credenciais inválidas. Tente novamente.");
-        }
-    }
-    public void mensagemErroAutenticacao() {
-        System.out.println("Erro ao autenticar usuário. Verifique suas credenciais.");
-    }
 }

@@ -1,6 +1,7 @@
 package controller;
 
 import model.DispositivoModel;
+import utils.Mensagem;
 import view.DispositivoView;
 
 import java.util.ArrayList;
@@ -31,7 +32,7 @@ public class DispositivoController {
                     consultarDispositivo();
                     break;
                 case 3:
-                    removerDispositivo();
+                    selecionarDispositivoListadoParaRemover();
                     break;
                 case 4:
                     atualizarDispositivo();
@@ -45,41 +46,37 @@ public class DispositivoController {
     }
 
     public void cadastrarDispositivo() {
-        String[] tipoUnidade = dispositivoView.selecionarTipo();
-        String tipo = tipoUnidade[0];
-        String unidadeMedida = tipoUnidade[1];
-
-        String status = dispositivoView.selecionarStatus();
-
-        String marca = dispositivoView.solicitarEntrada("Marca:");
-        String modelo = dispositivoView.solicitarEntrada("Modelo:");
-
-        double valor = status.equals("Ativo")
-                ? dispositivoView.solicitarValor("Valor apresentado em " + unidadeMedida + ":")
-                : 0.0;
-
-        DispositivoModel dispositivo = new DispositivoModel(tipo, marca, modelo, status, valor);
+        DispositivoModel dispositivo = dispositivoView.cadastrar();
         dispositivos.add(dispositivo);
-
-        dispositivoView.exibirMensagem("Dispositivo cadastrado com sucesso!");
     }
 
     // Metodo para consultar dispositivos cadastrados
     public void consultarDispositivo() {
-        dispositivoView.exibirDispositivos(dispositivos);
+        Mensagem.mensagemDeLista();
+        for (DispositivoModel dispositivo : dispositivos) {
+            if (dispositivo != null && dispositivo.getTipo() != null && dispositivo.getMarca() != null
+                    && dispositivo.getModelo() != null && dispositivo.getStatus() != null
+                    && dispositivo.getValor() != 0.0) {
+                dispositivoView.exibirDispositivos(
+                        dispositivo.getTipo(),
+                        dispositivo.getMarca(),
+                        dispositivo.getModelo(),
+                        dispositivo.getStatus(),
+                        dispositivo.getValor());
+            }
+        }
     }
 
     // Metodo remover dispositivo por meio de índice
-    public void removerDispositivo() {
-        System.out.print("Informe o índice do dispositivo para remover: ");
-        int index = sc.nextInt();
-        sc.nextLine();
+    public void selecionarDispositivoListadoParaRemover() {
+        consultarDispositivo();
+       int index = dispositivoView.selecionarParaRemover(0) - 1;
 
         if (index >= 0 && index < dispositivos.size()) {
             dispositivos.remove(index);
-            System.out.println("Dispositivo removido com sucesso!");
+            Mensagem.mensagemDeRemovido();
         } else {
-            System.out.println("Índece inválido. Nenhum dispositivo foi removido.");
+            Mensagem.mensagemNumeroInvalido();
         }
     }
 
@@ -111,9 +108,9 @@ public class DispositivoController {
                     dispositivoView.exibirMensagem("Opção inválida.");
                     return;
             }
-            dispositivoView.exibirMensagem("Dispositivo atualizado com sucesso!");
+            Mensagem.mensagemDeAtualizado();
         } else {
-            dispositivoView.exibirMensagem("Índice inválido. Nenhuma atualização foi realizada.");
+            Mensagem.mensagemNumeroInvalido();
         }
     }
 
