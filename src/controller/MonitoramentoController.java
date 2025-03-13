@@ -11,17 +11,17 @@ public class MonitoramentoController {
     private MonitoramentoView view;
     private Paciente paciente;
     ArrayList<Paciente> pacientes = new ArrayList<>();
-    private AlertaMenuController alertaController;
+    private AlertaController alertaController;
     private ConsultaController consultaController;
     private Scanner sc;
     private MedicoView medicoView;
     private MedicoController medicoController;
 
-    public MonitoramentoController() {
+    public MonitoramentoController(Medico medico) {
         this.sc = new Scanner(System.in);
         this.pacientes = new ArrayList<>();
         this.view = new MonitoramentoView();
-        this.alertaController = new AlertaMenuController();
+        this.alertaController = new AlertaController(medico);
         this.consultaController = new ConsultaController(paciente);
         this.medicoView = new MedicoView();
     }

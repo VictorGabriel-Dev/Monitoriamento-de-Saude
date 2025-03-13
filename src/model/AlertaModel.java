@@ -3,11 +3,11 @@ package model;
 public class AlertaModel {
     private String tipo;
     private String mensagem;
-    private String paciente;
-    private String medico;
+    private Paciente paciente;
+    private Medico medico;
     private String data;
 
-    public AlertaModel(String tipo, String mensagem, String paciente, String medico, String data) {
+    public AlertaModel(String tipo, String mensagem, Paciente paciente, Medico medico, String data) {
         this.tipo = tipo;
         this.mensagem = mensagem;
         this.paciente = paciente;
@@ -31,19 +31,19 @@ public class AlertaModel {
         this.mensagem = mensagem;
     }
 
-    public String getPaciente() {
+    public Paciente getPaciente() {
         return this.paciente;
     }
 
-    public void setPaciente(String paciente) {
+    public void setPaciente(Paciente paciente) {
         this.paciente = paciente;
     }
 
-    public String getMedico() {
+    public Medico getMedico() {
         return this.medico;
     }
 
-    public void setMedico(String medico) {
+    public void setMedico(Medico medico) {
         this.medico = medico;
     }
 

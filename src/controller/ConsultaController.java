@@ -1,14 +1,16 @@
 package controller;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-import model.UsuarioRepositorio;
 import utils.Mensagem;
 import model.Consulta;
 import model.Medico;
 import model.Paciente;
 import model.UsuarioModel;
+import model.UsuarioRepositorio;
 import view.ConsultaView;
 
 public class ConsultaController {
@@ -16,40 +18,48 @@ public class ConsultaController {
     private Paciente paciente;
     private List<Consulta> consultas;
     private List<Medico> medicosDisponiveis;
-    private UsuarioRepositorio repositorio;
 
     public ConsultaController(Paciente paciente) {
         this.paciente = paciente;
         this.view = new ConsultaView();
         this.consultas = new ArrayList<>();
-        this.repositorio = UsuarioRepositorio.getInstance();
         this.medicosDisponiveis = new ArrayList<>();
-    }
 
-    public void agendarConsulta(Scanner ler, List<Medico> medicosDisponiveis) {
-        if (medicosDisponiveis == null || medicosDisponiveis.isEmpty()) {
-            medicosDisponiveis = new ArrayList<>();
-            for (UsuarioModel usuario : repositorio.getUsuarios()) {
-                if (usuario instanceof Medico) {
-                    medicosDisponiveis.add((Medico) usuario);
-                }
+        UsuarioRepositorio repositorio = UsuarioRepositorio.getInstance();
+        for (UsuarioModel usuario : repositorio.getUsuarios()) {
+            if (usuario instanceof Medico) {
+                this.medicosDisponiveis.add((Medico) usuario);
             }
         }
+    }
 
-        if (medicosDisponiveis.isEmpty()) {
-            System.out.println("Não há médicos disponíveis para agendamento.");
-            return;
+    public Consulta agendarConsulta() {
+        LocalDate dataConsulta = view.obterDataConsulta();
+        LocalTime horaConsulta = view.obterHoraConsulta();
+        Medico medicoSelecionado = listaMedicosDisponiveis();
+
+        if (verificarConflitoHorario(dataConsulta, horaConsulta, medicoSelecionado)) {
+            Mensagem.mensagemConflitoDeHorario();
         }
-        Consulta novaConsulta = view.formAddConsulta(ler, paciente, medicosDisponiveis, consultas);
-        if (novaConsulta != null) {
-            confirmarEditarCancelarConsulta(ler, novaConsulta);
+
+        Consulta consulta = new Consulta(dataConsulta, horaConsulta, paciente, medicoSelecionado, null, null);
+        consultas.add(consulta);
+        if (medicoSelecionado != null) {
+            confirmarOuCancelarConsulta(consulta);
         }
+        return consulta;
     }
 
     public void confirmarConsulta(Consulta consulta) {
+        if (consulta.getDataConsulta().isBefore(LocalDate.now())) {
+            return;
+        }
+        if (consulta.getHoraConsulta().isBefore(LocalTime.of(8, 0)) ||
+                consulta.getHoraConsulta().isAfter(LocalTime.of(17, 0))) {
+            return;
+        }
         // Adiciona a consulta ao histórico do paciente
         this.consultas.add(consulta);
-        
 
         Medico medico = consulta.getMedico();
         if (medico != null) {
@@ -62,15 +72,40 @@ public class ConsultaController {
         }
     }
 
+    private boolean verificarConflitoHorario(LocalDate dataConsulta, LocalTime horaConsulta, Medico medicoEscolhido) {
+        for (Consulta consulta : consultas) {
+            if (consulta.getDataConsulta().isEqual(dataConsulta) &&
+                    consulta.getHoraConsulta().equals(horaConsulta) &&
+                    consulta.getMedico().equals(medicoEscolhido) &&
+                    !consulta.equals(consulta)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public Medico listaMedicosDisponiveis() {
+        if (medicosDisponiveis.isEmpty()) {
+            Mensagem.mensagemNaoHaMedicos();
+            return null;
+        }
+        for (int i = 0; i < medicosDisponiveis.size(); i++) {
+            view.escolherMedico((i + 1), medicosDisponiveis.get(i).getNome(),
+                    medicosDisponiveis.get(i).getEspecialidade());
+        }
+        int escolha = view.getMedicoEscolhido() - 1;
+        return medicosDisponiveis.get(escolha);
+    }
+
     public void cancelarConsulta(Consulta consulta) {
         this.consultas.remove(consulta);
         Mensagem.mensagemConsultaCancelada();
     }
 
-    public void confirmarEditarCancelarConsulta(Scanner ler, Consulta consulta) {
+    public void confirmarOuCancelarConsulta(Consulta consulta) {
         int opcao;
         do {
-            opcao = view.opcoesDepoisDeAgendarConsulta(ler);
+            opcao = view.opcoesDepoisDeAgendarConsulta();
             switch (opcao) {
                 case 1:
                     confirmarConsulta(consulta);
@@ -81,31 +116,33 @@ public class ConsultaController {
                 case 3:
                     return;
                 default:
-                    System.out.println("Opção inválida.");
+                    Mensagem.mensagemOpcaoInvalida();
             }
         } while (opcao != 3);
     }
 
     public void consultarAgendamentos() {
-       List<Consulta> consultas = paciente.getHistoricoMedico();
+        List<Consulta> consultas = paciente.getHistoricoMedico();
         for (Consulta consulta : consultas) {
-            if (consultas != null && !consultas.isEmpty() && consulta.getPaciente() != null && consulta.getMedico() != null) {
+            if (consultas != null && !consultas.isEmpty() && consulta.getPaciente() != null
+                    && consulta.getMedico() != null) {
                 view.exibirAgendamentos(
                         consulta.getDataConsulta(),
                         consulta.getHoraConsulta(),
                         consulta.getPaciente().getNome(),
                         consulta.getMedico().getNome());
             }
-        };
+        }
+        ;
     }
 
     public void consultaOpcoes(Scanner ler) {
         int opcao;
         do {
-            opcao = view.opcoesAgendarConsultarAgendamento(ler);
+            opcao = view.opcoesAgendarConsultarAgendamento();
             switch (opcao) {
                 case 1:
-                    agendarConsulta(ler, medicosDisponiveis);
+                    agendarConsulta();
                     break;
                 case 2:
                     consultarAgendamentos();
@@ -113,7 +150,7 @@ public class ConsultaController {
                 case 3:
                     return;
                 default:
-                    System.out.println("Opção inválida.");
+                    Mensagem.mensagemOpcaoInvalida();
             }
         } while (opcao != 4);
 
@@ -122,7 +159,9 @@ public class ConsultaController {
     public void consultarHistorico(Paciente paciente) {
         List<Consulta> consultas = paciente.getHistoricoMedico();
         for (Consulta consulta : consultas) {
-            if (consultas != null && !consultas.isEmpty() && consulta.getPaciente() != null && consulta.getMedico() != null && consulta.getDiagnostico() != null && consulta.getPrescricao() != null) {
+            if (consultas != null && !consultas.isEmpty() && consulta.getPaciente() != null
+                    && consulta.getMedico() != null && consulta.getDiagnostico() != null
+                    && consulta.getPrescricao() != null) {
                 view.exibirHistoricoMedico(
                         consulta.getDataConsulta(),
                         consulta.getHoraConsulta(),
@@ -145,8 +184,9 @@ public class ConsultaController {
                 case 2:
                     return;
                 default:
-                    System.out.println("Opção inválida.");
+                    Mensagem.mensagemOpcaoInvalida();
             }
         } while (opcao != 2);
     }
+
 }

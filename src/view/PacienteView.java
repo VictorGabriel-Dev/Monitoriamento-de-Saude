@@ -14,7 +14,8 @@ public class PacienteView extends BaseView<Paciente> {
         System.out.println("1. Consultar dados");
         System.out.println("2. Histórico");
         System.out.println("3. Consulta");
-        System.out.println("4. Sair");
+        System.out.println("4. Dispositivo");
+        System.out.println("5. Sair");
         return ler.nextInt();
     }
 
@@ -29,7 +30,8 @@ public class PacienteView extends BaseView<Paciente> {
         System.out.println("6 - E-mail");
         System.out.println("7 - Voltar");
         System.out.print("Escolha o dado a ser alterado: ");
-        return ler.nextInt();
+
+        return validateIntInput("Escolha o dado a ser alterado: ");
     }
 
     public String solicitarInput(PacienteInputType tipo) {
@@ -51,7 +53,6 @@ public class PacienteView extends BaseView<Paciente> {
         }
     }
 
-
     private String solicitarDataNascimento() {
         while (true) {
             System.out.print("Digite a nova data de nascimento (dd/MM/yyyy): ");
@@ -64,8 +65,9 @@ public class PacienteView extends BaseView<Paciente> {
             }
         }
     }
+
     public LocalDate parseDataNascimento(String dataString) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         return LocalDate.parse(dataString, formatter);
-    }    
+    }
 }

@@ -6,43 +6,53 @@ import view.DispositivoView;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 public class DispositivoController {
     private DispositivoView dispositivoView = new DispositivoView();
-    private Scanner sc = new Scanner(System.in);
     private List<DispositivoModel> dispositivos;
 
     public DispositivoController() {
         this.dispositivoView = new DispositivoView();
-        this.sc = new Scanner(System.in);
         this.dispositivos = new ArrayList<>();
     }
-
-    public void menu() {
+    public void configurarDispositivo() {
         int opcao;
         do {
-            opcao = dispositivoView.exibirMenu();
-            sc.nextLine();
+            opcao = dispositivoView.opcoesConfigurar();
             switch (opcao) {
                 case 1:
                     cadastrarDispositivo();
                     break;
                 case 2:
-                    consultarDispositivo();
-                    break;
-                case 3:
                     selecionarDispositivoListadoParaRemover();
                     break;
-                case 4:
+                case 3:
                     atualizarDispositivo();
                     break;
-                case 5:
+                case 4:
                     return;
                 default:
-                    System.out.println("Opção inválida.");
+                    Mensagem.mensagemValorInvalido();
+                    break;
             }
-        } while (opcao != 5);
+        } while (opcao != 4);
+    }
+    public void menu() {
+        int opcao;
+        do {
+            consultarDispositivo();
+            opcao = dispositivoView.exibirMenu();
+            switch (opcao) {
+                case 1:
+                    configurarDispositivo();
+                    break;
+                case 2:
+                    return;
+                default:
+                    Mensagem.mensagemValorInvalido();
+                    break;
+            }
+        } while (opcao != 2);
     }
 
     public void cadastrarDispositivo() {
@@ -70,7 +80,7 @@ public class DispositivoController {
     // Metodo remover dispositivo por meio de índice
     public void selecionarDispositivoListadoParaRemover() {
         consultarDispositivo();
-       int index = dispositivoView.selecionarParaRemover(0) - 1;
+        int index = dispositivoView.selecionarParaRemover(0) - 1;
 
         if (index >= 0 && index < dispositivos.size()) {
             dispositivos.remove(index);
